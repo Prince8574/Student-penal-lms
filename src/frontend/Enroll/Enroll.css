@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700;800;900&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+.enroll-page {
+  min-height: 100vh;
+  background: #06080F;
+  color: #B8C4D8;
+  font-family: 'Figtree', 'Segoe UI', sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.enroll-card {
+  background: #0B0F1A;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+  animation: enrollCardIn .4s cubic-bezier(.34,1.1,.64,1) both;
+}
+
+.enroll-card.payment-mode {
+  max-width: 900px;
+  overflow: visible;
+}
+
+@keyframes enrollCardIn {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.enroll-hero {
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+
+.enroll-body {
+  padding: 22px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.enroll-step-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.enroll-step-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: .62rem;
+  font-weight: 700;
+  transition: all .3s;
+}
+
+.enroll-btn-primary {
+  width: 100%;
+  padding: 13px;
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #4F6EF7, #6B85F8);
+  color: #fff;
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: inherit;
+}
+.enroll-btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+.enroll-btn-primary:disabled { background: #1C2740; color: #3A4460; cursor: not-allowed; transform: none; }
+
+.enroll-btn-ghost {
+  padding: 11px 20px;
+  border-radius: 11px;
+  border: 1px solid rgba(255,255,255,.09);
+  background: transparent;
+  color: #6B7A99;
+  font-size: .82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .18s;
+  font-family: inherit;
+}
+.enroll-btn-ghost:hover { border-color: rgba(255,255,255,.14); color: #F0F4FF; background: #151E2E; }
+
+.enroll-feature-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.enroll-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #151E2E;
+  border: 1px solid rgba(255,255,255,.05);
+  font-size: .76rem;
+  color: #B8C4D8;
+}
+
+.enroll-success-icon {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  font-size: 2.2rem;
+  animation: successPop .5s cubic-bezier(.34,1.5,.64,1) both;
+}
+
+@keyframes successPop {
+  from { opacity: 0; transform: scale(.6); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.enroll-divider {
+  height: 1px;
+  background: rgba(255,255,255,.05);
+}

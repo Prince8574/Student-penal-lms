@@ -1,0 +1,431 @@
+
+
+*,::before,::after{
+  box-sizing:border-box;
+  margin:0;
+  padding:0
+}
+
+html,body{
+  margin:0;
+  padding:0;
+  overflow-x:hidden;
+  width:100%
+}
+
+html{
+  scrollbar-width:thin;
+  scrollbar-color:#1a2a4a transparent
+}
+
+::-webkit-scrollbar{
+  width:5px
+}
+
+::-webkit-scrollbar-thumb{
+  background:#1a2a4a;
+  border-radius:3px
+}
+
+body{
+  /* cursor: pointer!important */
+}
+
+/* Animations */
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(18px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes slideIn{
+  from{opacity:0;transform:translateX(-16px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+@keyframes popIn{
+  from{opacity:0;transform:scale(0.78)}
+  to{opacity:1;transform:scale(1)}
+}
+
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes shimmer{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+
+@keyframes shake{
+  0%,100%{transform:translateX(0)}
+  20%,60%{transform:translateX(-5px)}
+  40%,80%{transform:translateX(5px)}
+}
+
+@keyframes checkBounce{
+  0%{transform:scale(0) rotate(-12deg)}
+  70%{transform:scale(1.25) rotate(6deg)}
+  100%{transform:scale(1) rotate(0)}
+}
+
+@keyframes toastIn{
+  from{opacity:0;transform:translateY(18px) scale(.94)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+@keyframes noise{
+  0%{transform:translate(0)}
+  33%{transform:translate(-3%,-2%)}
+  66%{transform:translate(2%,3%)}
+  100%{transform:translate(0)}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,.5)}
+  50%{box-shadow:0 0 0 9px rgba(240,165,0,0)}
+}
+
+@keyframes borderBreathe{
+  0%,100%{border-color:rgba(240,165,0,.22)}
+  50%{border-color:rgba(240,165,0,.6)}
+}
+
+@keyframes dot{
+  0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,.5)}
+  50%{box-shadow:0 0 0 5px rgba(240,165,0,0)}
+}
+
+/* Form Elements */
+.lv-inp{
+  width:100%;
+  padding:11px 14px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.07);
+  background:rgba(255,255,255,.03);
+  color:#f0f6ff;
+  font-family:inherit;
+  font-size:.875rem;
+  outline:none;
+  transition:border-color .22s,background .22s,box-shadow .22s;
+  resize:none;
+}
+
+.lv-inp::placeholder{
+  color:#3d4f6e
+}
+
+.lv-inp:focus{
+  border-color:rgba(240,165,0,.4);
+  background:rgba(240,165,0,.025);
+  box-shadow:0 0 0 3px rgba(240,165,0,.08)
+}
+
+.lv-inp.err{
+  border-color:rgba(239,68,68,.45)!important;
+  animation:shake .35s ease
+}
+
+.lv-inp.ok{
+  border-color:rgba(74,222,128,.3)!important
+}
+
+/* Tab Pills */
+.tab-pill{
+  padding:9px 18px;
+  border-radius:10px;
+  border:1px solid transparent;
+  cursor: pointer;
+  font-family:inherit;
+  font-size:.8rem;
+  font-weight:600;
+  transition:all .22s;
+  background:transparent;
+  color:#3d4f6e;
+  white-space:nowrap
+}
+
+.tab-pill.on{
+  background:rgba(240,165,0,.1);
+  color:#f0a500;
+  border-color:rgba(240,165,0,.22)!important
+}
+
+.tab-pill:hover:not(.on){
+  background:rgba(255,255,255,.04);
+  color:#8899b8
+}
+
+/* Skill Tags */
+.sk-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:.72rem;
+  font-weight:700;
+  cursor: pointer;
+  transition:all .2s;
+  border:1px solid
+}
+
+.sk-tag:hover{
+  transform:translateY(-2px);
+  box-shadow:0 5px 14px rgba(0,0,0,.3)
+}
+
+.sk-tag .x{
+  font-size:.6rem;
+  opacity:.55;
+  transition:opacity .15s;
+  margin-left:3px
+}
+
+.sk-tag:hover .x{
+  opacity:1;
+  color:#ef4444
+}
+
+.add-tag{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:.72rem;
+  font-weight:700;
+  cursor: pointer;
+  background:rgba(255,255,255,.03);
+  border:1px dashed rgba(255,255,255,.12);
+  color:#3d4f6e;
+  transition:all .2s
+}
+
+.add-tag:hover{
+  border-color:rgba(240,165,0,.38);
+  color:#f0a500;
+  background:rgba(240,165,0,.05)
+}
+
+/* Social Row */
+.soc-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:10px 13px;
+  border-radius:12px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  transition:border-color .2s
+}
+
+.soc-row:focus-within{
+  border-color:rgba(240,165,0,.3)
+}
+
+/* Buttons */
+.sv-btn{
+  padding:12px 30px;
+  border-radius:12px;
+  border:none;
+  background:linear-gradient(135deg,#f0a500,#ff7a30);
+  color:#030810;
+  font-family:inherit;
+  font-size:.9rem;
+  font-weight:800;
+  cursor: pointer;
+  transition:all .22s;
+  position:relative;
+  overflow:hidden
+}
+
+.sv-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 10px 30px rgba(240,165,0,.4)
+}
+
+.sv-btn .shine{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.25),transparent);
+  transform:translateX(-120%);
+  transition:transform .4s
+}
+
+.sv-btn:hover .shine{
+  transform:translateX(120%)
+}
+
+.cn-btn{
+  padding:12px 22px;
+  border-radius:12px;
+  border:1px solid rgba(255,255,255,.08);
+  background:transparent;
+  color:#8899b8;
+  font-family:inherit;
+  font-size:.88rem;
+  font-weight:700;
+  cursor: pointer;
+  transition:all .22s
+}
+
+.cn-btn:hover{
+  border-color:rgba(255,255,255,.18);
+  color:#f0f6ff;
+  background:rgba(255,255,255,.04)
+}
+
+/* Switch */
+.sw{
+  position:relative;
+  width:44px;
+  height:24px;
+  border-radius:99px;
+  cursor: pointer;
+  transition:background .25s;
+  flex-shrink:0
+}
+
+.sw::after{
+  content:'';
+  position:absolute;
+  top:3px;
+  left:3px;
+  width:18px;
+  height:18px;
+  border-radius:50%;
+  background:white;
+  transition:transform .25s;
+  box-shadow:0 2px 5px rgba(0,0,0,.4)
+}
+
+.sw.on::after{
+  transform:translateX(20px)
+}
+
+/* Color Swatches */
+.swatch{
+  width:26px;
+  height:26px;
+  border-radius:50%;
+  cursor: pointer;
+  border:2px solid transparent;
+  transition:all .2s;
+  flex-shrink:0
+}
+
+.swatch.sel{
+  border-color:white;
+  transform:scale(1.22);
+  box-shadow:0 0 10px rgba(255,255,255,.4)
+}
+
+.swatch:hover:not(.sel){
+  transform:scale(1.1)
+}
+
+/* Drag Zone */
+.drag-z{
+  border:2px dashed rgba(255,255,255,.1);
+  border-radius:13px;
+  padding:22px;
+  text-align:center;
+  cursor: pointer;
+  transition:all .25s;
+  background:rgba(255,255,255,.02)
+}
+
+.drag-z:hover{
+  border-color:rgba(240,165,0,.4);
+  background:rgba(240,165,0,.04)
+}
+
+/* Section Card */
+.s-card{
+  background:rgba(11,20,42,.9);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:20px;
+  padding:20px;
+  backdrop-filter:blur(20px);
+  transition:border-color .3s
+}
+
+.s-card:hover{
+  border-color:rgba(240,165,0,.12)
+}
+
+/* Cursor */
+.cur-d{
+  pointer-events:none;
+  position:fixed;
+  z-index:9999;
+  border-radius:50%;
+  transform:translate(-50%,-50%)
+}
+
+.cur-r{
+  pointer-events:none;
+  position:fixed;
+  z-index:9998;
+  border-radius:50%;
+  transform:translate(-50%,-50%)
+}
+
+/* Toggle Row */
+.tog-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:13px 16px;
+  border-radius:12px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06)
+}
+
+.tog-row:hover{
+  border-color:rgba(255,255,255,.1)
+}
+
+/* Certificate Row */
+.cert-r{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:13px 15px;
+  border-radius:13px;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
+  transition:all .2s
+}
+
+.cert-r:hover{
+  border-color:rgba(240,165,0,.2);
+  background:rgba(240,165,0,.03)
+}
+
+/* Step Components */
+.step-line{
+  flex:1;
+  height:2px;
+  border-radius:2px;
+  margin:0 5px;
+  margin-bottom:20px;
+  transition:background .5s
+}
+
+.step-dot{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  border:2px solid;
+  display:grid;
+  place-items:center;
+  transition:all .35s;
+  flex-shrink:0
+}
+

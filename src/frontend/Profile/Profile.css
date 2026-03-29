@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Profile-specific styles only - no global overrides */
+
+.profile-page {
+  cursor: auto;
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+.profile-page * {
+  box-sizing: border-box;
+}
+
+.ff-serif {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-style: normal;
+}
+
+.ff-sans {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Animations */
+@keyframes spin{
+  to{transform:rotate(360deg)}
+}
+
+@keyframes pulse-green{
+  0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,.55)}
+  60%{box-shadow:0 0 0 10px rgba(74,222,128,0)}
+}
+
+@keyframes pulse-gold{
+  0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,.5)}
+  50%{box-shadow:0 0 0 8px rgba(240,165,0,0)}
+}
+
+@keyframes blink{
+  0%,100%{opacity:1}
+  50%{opacity:.2}
+}
+
+@keyframes shimmer{
+  0%{transform:translateX(-120%)}
+  100%{transform:translateX(120%)}
+}
+
+@keyframes flicker{
+  0%,100%{transform:scale(1) rotate(-6deg)}
+  50%{transform:scale(1.22) rotate(6deg)}
+}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-8px)}
+}
+
+@keyframes noise{
+  0%{transform:translate(0)}
+  33%{transform:translate(-3%,-2%)}
+  66%{transform:translate(2%,3%)}
+  100%{transform:translate(0)}
+}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(24px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+@keyframes slideLeft{
+  from{opacity:0;transform:translateX(-22px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+@keyframes slideRight{
+  from{opacity:0;transform:translateX(20px)}
+  to{opacity:1;transform:translateX(0)}
+}
+
+@keyframes popIn{
+  from{opacity:0;transform:scale(0.7)}
+  to{opacity:1;transform:scale(1)}
+}
+
+@keyframes ms-pulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,.45)}
+  50%{box-shadow:0 0 0 9px rgba(240,165,0,0)}
+}
+
+@keyframes bdot{
+  0%,100%{box-shadow:0 0 0 0 rgba(240,165,0,.5)}
+  50%{box-shadow:0 0 0 5px rgba(240,165,0,0)}
+}
+
+@keyframes coverReveal{
+  from{transform:scaleY(0.68);transform-origin:bottom}
+  to{transform:scaleY(1);transform-origin:bottom}
+}
+
+/* Hover Effects */
+.hday:hover{
+  transform:scale(1.55)!important;
+  z-index:10;
+  position:relative
+}
+
+.crow-item:hover{
+  transform:translateX(5px)!important;
+  border-color:rgba(255,255,255,.14)!important;
+  background:rgba(255,255,255,.05)!important
+}
+
+.certrow:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(240,165,0,.25)!important;
+  box-shadow:0 12px 32px rgba(0,0,0,.45)!important
+}
+
+.acard:hover{
+  transform:translateY(-3px)!important;
+  border-color:rgba(240,165,0,.22)!important
+}
+
+.badg-item:hover{
+  transform:translateY(-6px) scale(1.05)!important;
+  border-color:rgba(240,165,0,.28)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.45)!important
+}
+
+.sk-item:hover{
+  transform:translateY(-3px) scale(1.08)!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.4)!important
+}
+
+.soc-item:hover{
+  transform:translateX(4px)!important;
+  border-color:rgba(240,165,0,.28)!important;
+  background:rgba(240,165,0,.04)!important;
+  color:#f0f6ff!important
+}
+
+.stat-box:hover .sbox-bar{
+  opacity:1!important
+}
+
+.stat-box:hover .sbox-shine{
+  opacity:1!important
+}
+
+.nav-link:hover{
+  background:rgba(255,255,255,.07)!important;
+  color:#f0f6ff!important
+}
+
+.card-glow::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(240,165,0,.06),transparent 58%);
+  opacity:0;
+  transition:opacity .35s;
+  pointer-events:none
+}
+
+.card-glow:hover::before{
+  opacity:1
+}
+
+.card-glow:hover{
+  border-color:rgba(240,165,0,.18)!important
+}
+
+.feed-item:hover{
+  padding-left:18px!important
+}
+
+.ms-done:hover .ms-ico{
+  transform:scale(1.15)
+}
+
+.chip:hover{
+  transform:translateY(-2px)
+}
+
+.cur-main{
+  pointer-events:none;
+  position:fixed;
+  z-index:9999;
+  border-radius:50%;
+  transform:translate(-50%,-50%);
+  transition:width .18s,height .18s,opacity .18s
+}
+
+.cur-ring{
+  pointer-events:none;
+  position:fixed;
+  z-index:9998;
+  border-radius:50%;
+  transition:width .3s,height .3s,opacity .3s
+}
+
+.cover-canvas{
+  animation:coverReveal .9s cubic-bezier(0.16,1,0.3,1) .12s both
+}
+
+.timer-ring{
+  transition:stroke-dashoffset 1s linear
+}

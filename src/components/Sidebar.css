@@ -1,0 +1,33 @@
+.sb-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all .2s;
+  margin-bottom: 2px;
+  position: relative;
+  font-size: .82rem;
+  font-weight: 500;
+}
+
+.sb-link:hover {
+  background: rgba(255, 255, 255, .06);
+}
+
+.sb-link.on {
+  background: rgba(240, 165, 0, .09);
+  border-color: rgba(240, 165, 0, .18);
+}
+
+.sb-link.on::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 58%;
+  background: linear-gradient(180deg, #f0a500, #ff7a30);
+  border-radius: 0 2px 2px 0;
+}

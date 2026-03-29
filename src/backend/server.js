@@ -1,0 +1,85 @@
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
+
+const { connectDB, registerShutdownHooks, dbStatus } = require('./config/db');
+
+const app = express();
+
+// Middleware
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
+    'http://localhost:3002',
+    'http://127.0.0.1:3002',
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Routes
+app.use('/api/auth',        require('./routes/auth'));
+app.use('/api/users',       require('./routes/users'));
+app.use('/api/courses',     require('./routes/courses'));
+app.use('/api/enrollments', require('./routes/enrollments'));
+app.use('/api/categories',  require('./routes/categories'));
+app.use('/api/student/assignments', require('./routes/assignmentRoutes'));
+app.use('/api/assignments', require('./routes/assignments'));
+app.use('/api/submissions', require('./routes/submissions'));
+app.use('/api/settings',    require('./routes/settings'));
+app.use('/api/payments',    require('./routes/payments'));
+app.use('/api/posts',       require('./routes/posts'));
+app.use('/api/messages',    require('./routes/messages'));
+app.use('/api/upload',      require('./routes/upload'));
+
+// Serve uploaded images
+app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/certificates', express.static(__dirname + '/certificates'));
+
+// Health Check
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'LearnVerse Student API is running',
+    db: dbStatus(),
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: 'Something went wrong!',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined,
+  });
+});
+
+// Connect DB then start server
+const PORT = process.env.PORT || 5001;
+
+connectDB().then(() => {
+  registerShutdownHooks();
+  const server = app.listen(PORT, '127.0.0.1', () => {
+    console.log(`🚀 Student server running on http://localhost:${PORT}`);
+    console.log(`📍 API: http://localhost:${PORT}/api`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(`❌ Port ${PORT} is already in use. Stop the existing process or change PORT in .env`);
+    } else {
+      console.error('❌ Server error:', err.message);
+    }
+    process.exit(1);
+  });
+});

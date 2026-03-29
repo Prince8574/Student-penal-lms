@@ -1,0 +1,18 @@
+/* Emergency scroll fix - import this in index.js if needed */
+
+html, body, #root, .App {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+body {
+  position: relative !important;
+}
+
+.home-page, .auth-page, .profile-page {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+}
