@@ -1,70 +1,190 @@
-# Getting Started with Create React App
+<div align="center">
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# 🎓 LearnVerse — Student Panel LMS
 
-## Available Scripts
+**A modern, full-stack Learning Management System built with React & Node.js**
 
-In the project directory, you can run:
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
+[![License](https://img.shields.io/badge/License-ISC-blue?style=for-the-badge)](LICENSE)
 
-### `npm start`
+</div>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📌 Overview
 
-### `npm test`
+**LearnVerse** is a feature-rich Student Panel LMS (Learning Management System) that brings together course management, real-time community interaction, assignment tracking, grading, and more — all under one roof. Designed for students who want a seamless and engaging learning experience.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ✨ Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+| Module | Description |
+|--------|-------------|
+| 🏠 **Home** | Personalized dashboard with quick access to courses and activity |
+| 🔐 **Authentication** | Secure signup/login with JWT-based session management |
+| 📚 **My Courses** | Browse and manage enrolled courses |
+| 🔍 **Explore** | Discover new courses and learning content |
+| 📖 **Learn** | Interactive lesson viewer for enrolled courses |
+| 📝 **Assignments** | Submit and track assignments |
+| 📊 **Grades** | View grades and academic performance |
+| 🤝 **Community** | Social feed with posts, comments, reactions, and direct messaging |
+| 🔔 **Notifications** | Real-time alerts for course updates and interactions |
+| 👤 **Profile** | View and edit student profile |
+| ⚙️ **Settings** | Account preferences and configuration |
+| 🎓 **Enroll** | Course enrollment flow |
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 🛠️ Tech Stack
 
-### `npm run eject`
+### Frontend
+- **React 19** — UI library
+- **React Router v7** — Client-side routing
+- **Axios** — HTTP requests
+- **GSAP** — Animations
+- **Three.js** — 3D visuals
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend
+- **Node.js + Express** — REST API server
+- **MongoDB + Mongoose** — Database & ODM
+- **JWT** — Authentication & authorization
+- **bcryptjs** — Password hashing
+- **Nodemailer** — Email notifications
+- **PDFKit** — PDF generation
+- **Multer** — File uploads
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🚀 Getting Started
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Prerequisites
 
-## Learn More
+- [Node.js](https://nodejs.org/) v18 or higher
+- [MongoDB](https://www.mongodb.com/) (local or Atlas)
+- npm
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 1. Clone the Repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+```bash
+git clone https://github.com/Prince8574/Student-penal-lms.git
+cd Student-penal-lms
+```
 
-### Code Splitting
+### 2. Start the Backend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+cd src/backend
+npm install
+```
 
-### Analyzing the Bundle Size
+Create a `.env` file in `src/backend/`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```env
+PORT=5001
+MONGO_URI=mongodb://localhost:27017/learnverse
+JWT_SECRET=your_jwt_secret_here
+```
 
-### Making a Progressive Web App
+```bash
+npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+The API will be available at `http://localhost:5001`.
 
-### Advanced Configuration
+### 3. Start the Frontend
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Open a new terminal in the project root:
 
-### Deployment
+```bash
+npm install
+npm start
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+The app will open at `http://localhost:3000`.
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📡 API Overview
+
+Base URL: `http://localhost:5001/api`
+
+| Resource | Endpoints |
+|----------|-----------|
+| **Auth** | `POST /auth/register`, `POST /auth/login` |
+| **Posts** | `GET/POST /posts`, like, react, bookmark, comment, reply |
+| **Messages** | `GET/POST /messages/:userId`, user search |
+| **Courses** | Course CRUD and enrollment |
+
+> All protected routes require `Authorization: Bearer <token>` header.
+
+For full API documentation, see [`COMMUNITY_BACKEND.md`](COMMUNITY_BACKEND.md).
+
+---
+
+## 📁 Project Structure
+
+```
+Student-penal-lms/
+├── public/                  # Static assets
+├── src/
+│   ├── backend/             # Express API server
+│   │   ├── config/          # DB & app config
+│   │   ├── controllers/     # Route handlers
+│   │   ├── middleware/      # Auth & validation middleware
+│   │   ├── models/          # Mongoose models
+│   │   ├── routes/          # API route definitions
+│   │   ├── services/        # Business logic
+│   │   └── server.js        # App entry point
+│   ├── components/          # Shared UI components (Sidebar, TopBar)
+│   ├── context/             # React context providers
+│   ├── frontend/            # Feature modules
+│   │   ├── Auth/            # Login & Signup pages
+│   │   ├── Home/            # Dashboard
+│   │   ├── Course/          # Course viewer
+│   │   ├── Community/       # Social feed & messaging
+│   │   ├── Assignments/     # Assignment management
+│   │   ├── Grades/          # Grade tracking
+│   │   └── ...              # Other modules
+│   ├── services/            # API service helpers
+│   └── App.js               # Root component & routing
+├── package.json
+└── README.md
+```
+
+---
+
+## 🧪 Running Tests
+
+```bash
+# Frontend tests
+npm test
+
+# Backend API health check
+curl http://localhost:5001/api/health
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the **ISC License**.
+
+---
+
+<div align="center">
+Made with ❤️ for learners everywhere
+</div>
