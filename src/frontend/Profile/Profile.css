@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
 
 /* Profile-specific styles only - no global overrides */
 
 .profile-page {
   cursor: auto;
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
 }
 
 .profile-page * {
@@ -12,12 +12,15 @@
 }
 
 .ff-serif {
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: "Merriweather", serif;
+  font-optical-sizing: auto;
+  font-weight: 800;
   font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 .ff-sans {
-  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
 }
 
 /* Animations */
@@ -157,7 +160,7 @@
   position:absolute;
   inset:0;
   border-radius:20px;
-  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(240,165,0,.06),transparent 58%);
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(245,158,11,.06),transparent 58%);
   opacity:0;
   transition:opacity .35s;
   pointer-events:none
@@ -168,7 +171,7 @@
 }
 
 .card-glow:hover{
-  border-color:rgba(240,165,0,.18)!important
+  border-color:rgba(245,158,11,.2)!important
 }
 
 .feed-item:hover{

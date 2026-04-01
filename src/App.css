@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 } */
+
+@keyframes topbar-av-spin {
+  to { transform: rotate(360deg); }
+}

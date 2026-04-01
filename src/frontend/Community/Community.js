@@ -17,93 +17,26 @@ const TAG_COL = {
 const REACTIONS = ["❤️","🔥","👏","💡","😂","🎉"];
 
 /* ─── Explore section data ──────────────────────────────────────── */
-const EX_MEMBERS = [
-  { id:1, name:"Aria Novak",   role:"Lead Designer",     posts:1240, karma:"12.4k", avatar:"AN", color:"#FF2D78", badge:"🏆" },
-  { id:2, name:"Dev Rathore",  role:"Full-Stack Dev",    posts: 987, karma:"9.8k",  avatar:"DR", color:"#4DFFCC", badge:"⚡" },
-  { id:3, name:"Priya Mehta",  role:"AI Researcher",     posts: 834, karma:"8.3k",  avatar:"PM", color:"#A78BFA", badge:"🔬" },
-  { id:4, name:"Kai Okafor",   role:"Community Manager", posts: 672, karma:"6.7k",  avatar:"KO", color:"#FBCF4A", badge:"🌟" },
-  { id:5, name:"Lena Fischer", role:"Open Source Eng",   posts: 590, karma:"5.9k",  avatar:"LF", color:"#38BDF8", badge:"🛠" },
-  { id:6, name:"Ryu Tanaka",   role:"Security Expert",   posts: 445, karma:"4.4k",  avatar:"RT", color:"#FF7A50", badge:"🔐" },
-];
-const EX_FEED = [
-  { tag:"Discussion", title:"How AI is reshaping open-source contribution workflows",         author:"Priya Mehta",  time:"2h ago", replies:84,  likes:312, color:"#A78BFA", icon:"💬" },
-  { tag:"Showcase",   title:"Built a real-time 3D collaboration tool in a weekend hackathon", author:"Dev Rathore",  time:"5h ago", replies:56,  likes:198, color:"#4DFFCC", icon:"🚀" },
-  { tag:"Help",       title:"WebGL performance degrading on mobile — any tips?",              author:"Kai Okafor",   time:"8h ago", replies:29,  likes: 67, color:"#FBCF4A", icon:"🙋" },
-  { tag:"Announce",   title:"Community v3.0 launching next month — sneak peek inside!",       author:"Aria Novak",   time:"1d ago", replies:143, likes:820, color:"#FF2D78", icon:"📣" },
-  { tag:"Project",    title:"Open-sourcing our design system — 200+ components, fully typed", author:"Lena Fischer", time:"2d ago", replies:97,  likes:540, color:"#38BDF8", icon:"🎨" },
-];
+const EX_MEMBERS = [];
+const EX_FEED = [];
 const EX_STATS = [
-  { label:"Members",     value:"48,200+", icon:"👥", change:"+12% this month", c:"#4DFFCC" },
-  { label:"Posts Today", value:"1,830",   icon:"📝", change:"+8% vs yesterday", c:"#FF2D78" },
-  { label:"Projects",    value:"7,500+",  icon:"🚀", change:"+340 this week",   c:"#A78BFA" },
-  { label:"Countries",   value:"112",     icon:"🌍", change:"Worldwide reach",  c:"#FBCF4A" },
+  { label:"Members",     value:"—", icon:"👥", change:"", c:"#4DFFCC" },
+  { label:"Posts Today", value:"—", icon:"📝", change:"", c:"#FF2D78" },
+  { label:"Projects",    value:"—", icon:"🚀", change:"", c:"#A78BFA" },
+  { label:"Countries",   value:"—", icon:"🌍", change:"", c:"#FBCF4A" },
 ];
-const EX_CATS = [
-  { name:"Design",       count:2840, color:"#FF2D78" },
-  { name:"Engineering",  count:4120, color:"#4DFFCC" },
-  { name:"AI & ML",      count:1990, color:"#A78BFA" },
-  { name:"Open Source",  count:1430, color:"#38BDF8" },
-  { name:"DevOps",       count: 870, color:"#FBCF4A" },
-];
+const EX_CATS = [];
 
 /* ─── Feed data ─────────────────────────────────────────────────── */
-const INIT_POSTS = [
-  { id:1, author:"Priya K.", avatar:"PK", color:"#60a5fa", role:"Student", course:"Machine Learning", time:"2m ago",
-    content:"Can anyone explain the difference between L1 and L2 regularization? I keep getting confused during assignments.", likes:14, tag:"Question", bookmarked:false,
-    reactions:{"❤️":3,"💡":8},
-    comments:[
-      { id:1, author:"Rahul M.", avatar:"RM", color:"#4ade80", text:"L1 adds absolute value of weights (sparse), L2 adds squared weights (smooth). L1 is better for feature selection!", time:"1m ago", likes:5, replies:[] },
-      { id:2, author:"Arjun V.", avatar:"AV", color:"#f472b6", text:"Great question! Check out Andrew Ng's ML course — he explains it really well with visuals.", time:"just now", likes:2, replies:[] },
-    ]},
-  { id:2, author:"Rahul M.", avatar:"RM", color:"#4ade80", role:"Student", course:"Full Stack Web Dev", time:"18m ago",
-    content:"Just finished the React hooks assignment — the useEffect cleanup function finally clicked for me! Sharing my notes if anyone needs.", likes:31, tag:"Resource", bookmarked:true,
-    reactions:{"❤️":12,"🔥":7,"👏":5},
-    comments:[
-      { id:1, author:"Sneha T.", avatar:"ST", color:"#f0a500", text:"Please share! I've been struggling with cleanup functions too.", time:"15m ago", likes:3, replies:[] },
-    ]},
-  { id:3, author:"Sneha T.", avatar:"ST", color:"#f0a500", role:"Student", course:"Data Structures", time:"1h ago",
-    content:"Study group for DSA final exam this Saturday 3PM IST. Drop a reply if you want to join the call! We'll cover trees, graphs and DP.", likes:22, tag:"Study Group", bookmarked:false,
-    reactions:{"🎉":9,"👏":6},
-    comments:[
-      { id:1, author:"Meera S.", avatar:"MS", color:"#a78bfa", text:"I'm in! Will we cover dynamic programming too?", time:"55m ago", likes:1, replies:[] },
-    ]},
-  { id:4, author:"Arjun V.", avatar:"AV", color:"#f472b6", role:"Student", course:"AWS Solutions", time:"3h ago",
-    content:"Got my AWS Solutions Architect cert today! Huge thanks to everyone in this community for the mock Q&A sessions.", likes:87, tag:"Achievement", bookmarked:false,
-    reactions:{"🎉":34,"❤️":28,"👏":19,"🔥":12},
-    comments:[
-      { id:1, author:"Rahul M.", avatar:"RM", color:"#4ade80", text:"Congrats!! You absolutely crushed it. Any tips for the exam?", time:"2h ago", likes:8, replies:[] },
-    ]},
-];
+const INIT_POSTS = [];
 
 const MOCK_ROOMS = [
-  { id:1, name:"DSA Study Hall",  members:142, active:8,  color:"#60a5fa", ico:"🧮" },
-  { id:2, name:"ML Discussion",   members:98,  active:5,  color:"#a78bfa", ico:"🤖" },
-  { id:3, name:"Web Dev Lounge",  members:211, active:14, color:"#4ade80", ico:"🌍" },
-  { id:4, name:"Design Critique", members:67,  active:3,  color:"#f472b6", ico:"🎨" },
-  { id:5, name:"AWS Prep Group",  members:55,  active:2,  color:"#f59e0b", ico:"☁️" },
+  { id:1, name:"DSA Study Hall",  members:0, active:0, color:"#60a5fa", ico:"🧮" },
+  { id:2, name:"ML Discussion",   members:0, active:0, color:"#a78bfa", ico:"🤖" },
+  { id:3, name:"Web Dev Lounge",  members:0, active:0, color:"#4ade80", ico:"🌍" },
 ];
 
-const MOCK_CONVOS = [
-  { id:1, name:"Priya K.",  avatar:"PK", color:"#60a5fa", lastMsg:"Can you share your DSA notes?", time:"2m",  unread:2,
-    messages:[
-      { from:"them", text:"Hey! Can you share your DSA notes from last week?", time:"10:42 AM" },
-      { from:"me",   text:"Sure! I'll send them over now.", time:"10:43 AM" },
-      { from:"them", text:"Can you share your DSA notes?", time:"10:45 AM" },
-    ]},
-  { id:2, name:"Rahul M.",  avatar:"RM", color:"#4ade80", lastMsg:"Thanks for the help!", time:"18m", unread:0,
-    messages:[
-      { from:"me",   text:"Did you finish the React assignment?", time:"9:00 AM" },
-      { from:"them", text:"Yes! It was tough but done.", time:"9:05 AM" },
-      { from:"them", text:"Thanks for the help!", time:"9:06 AM" },
-    ]},
-  { id:3, name:"Sneha T.",  avatar:"ST", color:"#f0a500", lastMsg:"Saturday 3PM study group?", time:"1h",  unread:1,
-    messages:[{ from:"them", text:"Saturday 3PM study group?", time:"8:30 AM" }]},
-  { id:4, name:"Arjun V.",  avatar:"AV", color:"#f472b6", lastMsg:"Got my AWS cert!", time:"3h",  unread:0,
-    messages:[
-      { from:"them", text:"Got my AWS cert!", time:"7:00 AM" },
-      { from:"me",   text:"Congrats! That's amazing!", time:"7:02 AM" },
-    ]},
-];
+const MOCK_CONVOS = [];
 
 /* ─── Three.js particle globe ───────────────────────────────────── */
 function ParticleGlobe({ containerRef }) {
@@ -494,56 +427,154 @@ function Avatar({ initials, color, size=38 }) {
 }
 
 /* ─── Comment with like + reply ─────────────────────────────────── */
-function CommentItem({ c, depth }) {
+function CommentItem({ c, depth, postId, currentUserName, onDelete }) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(c.likes || 0);
   const [showReply, setShowReply] = useState(false);
   const [replyText, setReplyText] = useState("");
   const [replies, setReplies] = useState(c.replies || []);
+  const [showMenu, setShowMenu] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [editText, setEditText] = useState(c.text);
+  const [text, setText] = useState(c.text);
+  const [deleted, setDeleted] = useState(false);
+  const [hovered, setHovered] = useState(false);
+
+  // isOwn: check by name string match
+  var authorName = typeof c.author === 'object' ? (c.author && c.author.name ? c.author.name : '') : (c.author || '');
+  var isOwn = currentUserName && authorName && authorName.toLowerCase() === currentUserName.toLowerCase();
+
+  function handleDelete() {
+    setDeleted(true);
+    setShowMenu(false);
+    if (postId && c.id) {
+      fetch('http://localhost:5001/api/posts/' + postId + '/comments/' + c.id, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
+      }).catch(function(){});
+    }
+    if (onDelete) onDelete(c.id);
+  }
+
+  function handleSaveEdit() {
+    if (!editText.trim()) return;
+    setText(editText);
+    setEditing(false);
+    if (postId && c.id) {
+      fetch('http://localhost:5001/api/posts/' + postId + '/comments/' + c.id, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') },
+        body: JSON.stringify({ text: editText.trim() })
+      }).catch(function(){});
+    }
+  }
 
   function submitReply() {
     if (!replyText.trim()) return;
-    setReplies(function(p) { return p.concat({ id:Date.now(), author:"You", avatar:"ME", color:"#f0a500", text:replyText.trim(), time:"just now", likes:0, replies:[] }); });
-    setReplyText(""); setShowReply(false);
+    setReplies(function(p) { return p.concat({ id: Date.now(), author: currentUserName || 'You', avatar: 'ME', color: '#f0a500', text: replyText.trim(), time: 'just now', likes: 0, replies: [] }); });
+    setReplyText(''); setShowReply(false);
   }
 
+  if (deleted) return null;
+
   return (
-    <div style={{ display:"flex", gap:8, alignItems:"flex-start" }}>
-      <Avatar initials={c.avatar} color={c.color} size={depth>0?26:32}/>
+    <div style={{ display:'flex', gap:8, alignItems:'flex-start' }}>
+      <Avatar initials={c.avatar || (authorName ? authorName[0].toUpperCase() : 'U')} color={c.color || '#60a5fa'} size={depth > 0 ? 26 : 32}/>
       <div style={{ flex:1, minWidth:0 }}>
-        <div style={{ background:"rgba(255,255,255,.05)", borderRadius:14, padding:"8px 12px", display:"inline-block", maxWidth:"100%" }}>
-          <div style={{ fontSize:".78rem", fontWeight:700, color:"#e6edf3", marginBottom:2 }}>{c.author}</div>
-          <div style={{ fontSize:".83rem", color:"#c9d1d9", lineHeight:1.55 }}>{c.text}</div>
-          {c.image && <img src={c.image} alt="" style={{ marginTop:6, maxWidth:"100%", borderRadius:8, maxHeight:140, objectFit:"cover", display:"block" }}/>}
-        </div>
-        <div style={{ display:"flex", alignItems:"center", gap:12, paddingLeft:4, marginTop:4 }}>
-          <span style={{ fontSize:".68rem", color:"#6e7681" }}>{c.time}</span>
-          <button onClick={function() { setLiked(function(v){return !v;}); setLikes(function(n){return n+(liked?-1:1);}); }}
-            style={{ background:"none", border:"none", cursor:"pointer", color:liked?"#ef4444":"#6e7681", fontSize:".72rem", fontWeight:700, padding:0 }}>
-            {liked?"❤️":"Like"} {likes > 0 ? likes : ""}
+        {/* Bubble */}
+        <div style={{ position:'relative', display:'inline-block', maxWidth:'100%', minWidth:120 }}
+          onMouseEnter={function(){setHovered(true);}}
+          onMouseLeave={function(){setHovered(false); if(!showMenu) setShowMenu(false);}}>
+          <div style={{ background:'rgba(255,255,255,.06)', borderRadius:14, padding:'8px 36px 8px 12px' }}>
+            <div style={{ fontSize:'.78rem', fontWeight:700, color:'#e6edf3', marginBottom:2 }}>{authorName}</div>
+            {editing ? (
+              <div style={{ display:'flex', flexDirection:'column', gap:6 }}>
+                <textarea value={editText} onChange={function(e){setEditText(e.target.value);}} rows={2}
+                  style={{ width:'100%', background:'rgba(255,255,255,.06)', border:'1px solid rgba(255,255,255,.15)', borderRadius:8, padding:'5px 8px', color:'#c9d1d9', fontFamily:'inherit', fontSize:'.83rem', resize:'none', outline:'none' }}/>
+                <div style={{ display:'flex', gap:6 }}>
+                  <button onClick={handleSaveEdit}
+                    style={{ padding:'4px 12px', background:'#1f6feb', border:'none', borderRadius:7, color:'#fff', fontSize:'.75rem', fontWeight:700, cursor:'pointer' }}>Save</button>
+                  <button onClick={function(){setEditText(text); setEditing(false);}}
+                    style={{ padding:'4px 10px', background:'rgba(255,255,255,.06)', border:'none', borderRadius:7, color:'#8b949e', fontSize:'.75rem', cursor:'pointer' }}>Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <div style={{ fontSize:'.83rem', color:'#c9d1d9', lineHeight:1.55 }}>{text}</div>
+            )}
+            {c.image && <img src={c.image} alt="" style={{ marginTop:6, maxWidth:'100%', borderRadius:8, maxHeight:140, objectFit:'cover', display:'block' }}/>}
+          </div>
+
+          {/* 3-dot button — always visible on hover */}
+          <button onClick={function(e){e.stopPropagation(); setShowMenu(function(v){return !v;});}}
+            style={{ position:'absolute', top:6, right:6, background:'none', border:'none', cursor:'pointer',
+              color:'#8b949e', fontSize:'1rem', padding:'1px 4px', borderRadius:5, lineHeight:1,
+              opacity: hovered || showMenu ? 1 : 0, transition:'opacity .15s' }}>
+            ···
           </button>
-          {depth===0 && (
-            <button onClick={function() { setShowReply(function(v){return !v;}); }}
-              style={{ background:"none", border:"none", cursor:"pointer", color:showReply?"#60a5fa":"#6e7681", fontSize:".72rem", fontWeight:700, padding:0 }}>
+
+          {/* Dropdown */}
+          {showMenu && (
+            <div style={{ position:'absolute', top:28, right:0, background:'#1c2128', border:'1px solid #30363d', borderRadius:10, padding:'4px 0', zIndex:50, minWidth:120, boxShadow:'0 8px 24px rgba(0,0,0,.7)' }}
+              onMouseLeave={function(){setShowMenu(false);}}>
+              {isOwn && (
+                <button onClick={function(){setEditing(true); setShowMenu(false);}}
+                  style={{ display:'block', width:'100%', padding:'8px 14px', background:'none', border:'none', cursor:'pointer', color:'#c9d1d9', fontSize:'.82rem', textAlign:'left' }}
+                  onMouseEnter={function(e){e.currentTarget.style.background='rgba(255,255,255,.06)';}}
+                  onMouseLeave={function(e){e.currentTarget.style.background='none';}}>
+                  ✏️ Edit
+                </button>
+              )}
+              {isOwn && (
+                <button onClick={handleDelete}
+                  style={{ display:'block', width:'100%', padding:'8px 14px', background:'none', border:'none', cursor:'pointer', color:'#ef4444', fontSize:'.82rem', textAlign:'left' }}
+                  onMouseEnter={function(e){e.currentTarget.style.background='rgba(239,68,68,.08)';}}
+                  onMouseLeave={function(e){e.currentTarget.style.background='none';}}>
+                  🗑️ Delete
+                </button>
+              )}
+              <button onClick={function(){setDeleted(true); setShowMenu(false);}}
+                style={{ display:'block', width:'100%', padding:'8px 14px', background:'none', border:'none', cursor:'pointer', color:'#8b949e', fontSize:'.82rem', textAlign:'left' }}
+                onMouseEnter={function(e){e.currentTarget.style.background='rgba(255,255,255,.05)';}}
+                onMouseLeave={function(e){e.currentTarget.style.background='none';}}>
+                🚫 Hide
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Actions row */}
+        <div style={{ display:'flex', alignItems:'center', gap:12, paddingLeft:4, marginTop:4 }}>
+          <span style={{ fontSize:'.68rem', color:'#6e7681' }}>{c.time}</span>
+          <button onClick={function(){setLiked(function(v){return !v;}); setLikes(function(n){return n+(liked?-1:1);});}}
+            style={{ background:'none', border:'none', cursor:'pointer', color:liked?'#ef4444':'#6e7681', fontSize:'.72rem', fontWeight:700, padding:0 }}>
+            {liked ? '❤️' : 'Like'}{likes > 0 ? ' '+likes : ''}
+          </button>
+          {depth === 0 && (
+            <button onClick={function(){setShowReply(function(v){return !v;});}}
+              style={{ background:'none', border:'none', cursor:'pointer', color:showReply?'#60a5fa':'#6e7681', fontSize:'.72rem', fontWeight:700, padding:0 }}>
               Reply
             </button>
           )}
         </div>
-        {replies.length>0 && (
-          <div style={{ display:"flex", flexDirection:"column", gap:8, marginTop:8, paddingLeft:4 }}>
-            {replies.map(function(r) { return <CommentItem key={r.id} c={r} depth={1}/>; })}
+
+        {/* Replies */}
+        {replies.length > 0 && (
+          <div style={{ display:'flex', flexDirection:'column', gap:8, marginTop:8, paddingLeft:4 }}>
+            {replies.map(function(r){ return <CommentItem key={r.id} c={r} depth={1} postId={postId} currentUserName={currentUserName}/>; })}
           </div>
         )}
+
+        {/* Reply input */}
         {showReply && (
-          <div style={{ display:"flex", gap:8, alignItems:"center", marginTop:8 }}>
+          <div style={{ display:'flex', gap:8, alignItems:'center', marginTop:8 }}>
             <Avatar initials="ME" color="#f0a500" size={26}/>
-            <div style={{ flex:1, background:"rgba(255,255,255,.05)", border:"1px solid rgba(255,255,255,.08)", borderRadius:20, padding:"6px 12px", display:"flex", alignItems:"center", gap:6 }}>
+            <div style={{ flex:1, background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.08)', borderRadius:20, padding:'6px 12px', display:'flex', alignItems:'center', gap:6 }}>
               <textarea value={replyText} onChange={function(e){setReplyText(e.target.value);}}
-                onKeyDown={function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();submitReply();}}}
+                onKeyDown={function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();submitReply();}}}
                 placeholder="Write a reply..." rows={1}
-                style={{ flex:1, background:"none", border:"none", outline:"none", color:"#c9d1d9", fontFamily:"inherit", fontSize:".8rem", resize:"none", lineHeight:1.5 }}/>
+                style={{ flex:1, background:'none', border:'none', outline:'none', color:'#c9d1d9', fontFamily:'inherit', fontSize:'.8rem', resize:'none', lineHeight:1.5 }}/>
               <button onClick={submitReply} disabled={!replyText.trim()}
-                style={{ background:"none", border:"none", cursor:replyText.trim()?"pointer":"not-allowed", color:replyText.trim()?"#60a5fa":"#6e7681", fontSize:".8rem", fontWeight:700, padding:0, flexShrink:0 }}>
+                style={{ background:'none', border:'none', cursor:replyText.trim()?'pointer':'not-allowed', color:replyText.trim()?'#60a5fa':'#6e7681', fontSize:'.8rem', fontWeight:700, padding:0 }}>
                 Send
               </button>
             </div>
@@ -555,7 +586,7 @@ function CommentItem({ c, depth }) {
 }
 
 /* ─── Post card ─────────────────────────────────────────────────── */
-function PostCard({ post, onLike, onBookmark, onReact, onComment }) {
+function PostCard({ post, onLike, onBookmark, onReact, onComment, currentUserName }) {
   const [showComments, setShowComments] = useState(false);
   const [showReactions, setShowReactions] = useState(false);
   const [commentText, setCommentText] = useState("");
@@ -690,7 +721,7 @@ function PostCard({ post, onLike, onBookmark, onReact, onComment }) {
         <div style={S.commentSection}>
           {comments.length > 0 ? (
             <div style={{ display:"flex", flexDirection:"column", gap:10, marginBottom:12 }}>
-              {comments.map(function(c){return <CommentItem key={c.id} c={c} depth={0}/>;}) }
+              {comments.map(function(c){return <CommentItem key={c.id} c={c} depth={0} postId={post.id} currentUserName={currentUserName}/>;}) }
             </div>
           ) : null}
           {/* Comment input */}
@@ -751,10 +782,10 @@ function MessagesTab() {
           setConvos(mapped);
           setActive(mapped[0]);
         } else {
-          setActive(MOCK_CONVOS[0]);
+          setActive(null);
         }
       })
-      .catch(function() { setActive(MOCK_CONVOS[0]); });
+      .catch(function() { setActive(null); });
   }, []);
 
   function timeAgoMsg(d) {
@@ -916,10 +947,18 @@ export default function Community() {
   const [loadingPosts, setLoadingPosts] = useState(false);
   const [postText, setPostText] = useState("");
   const [postTag, setPostTag] = useState("Discussion");
-  const [postImage, setPostImage] = useState(null);       // preview (blob URL)
-  const [postImageFile, setPostImageFile] = useState(null); // actual File
+  const [postImage, setPostImage] = useState(null);
+  const [postImageFile, setPostImageFile] = useState(null);
   const [filterTag, setFilterTag] = useState("All");
+  const [communityStats, setCommunityStats] = useState({ members:0, postsToday:0, trendingTags:[] });
   const postImgRef = useRef(null);
+
+  useEffect(function() {
+    fetch(API + '/community/stats', { headers: authHeaders() })
+      .then(function(r){return r.json();})
+      .then(function(res){ if(res.success) setCommunityStats(res.data); })
+      .catch(function(){});
+  }, []);
 
   // Fetch posts when Feed tab opens
   useEffect(function() {
@@ -1092,11 +1131,9 @@ export default function Community() {
   var visiblePosts = filterTag==="All" ? posts : posts.filter(function(p){return p.tag===filterTag;});
 
   var TABS = [
-    { id:"explore",     label:"🌐 Explore" },
-    { id:"feed",        label:"📰 Feed" },
-    { id:"rooms",       label:"💬 Rooms" },
-    { id:"messages",    label:"✉️ Messages" },
-    { id:"leaderboard", label:"🏆 Leaderboard" },
+    { id:"explore",  label:"🌐 Explore" },
+    { id:"feed",     label:"📰 Feed" },
+    { id:"messages", label:"✉️ Messages" },
   ];
 
   return (
@@ -1134,78 +1171,15 @@ export default function Community() {
         {/* Other tabs */}
         {tab!=="explore" && tab!=="messages" && (
           <div style={{ flex:1, display:"flex", overflow:"hidden", minHeight:0 }}>
-            <div style={{ flex:1, overflowY:"auto", padding:"20px 24px", minWidth:0 }}>
-              <div style={{ maxWidth:560, margin:"0 auto", display:"flex", flexDirection:"column", gap:10 }}>
+            <div style={{ flex:1, display:"flex", flexDirection:"column", overflow:"hidden", minWidth:0, position:"relative" }}>
+              {/* Scrollable posts area */}
+              <div style={{ flex:1, overflowY:"auto", padding:"20px 24px 100px", minWidth:0 }}>
+                <div style={{ maxWidth:560, margin:"0 auto", display:"flex", flexDirection:"column", gap:10 }}>
 
               {tab==="feed" && (
                 <>
-                  {/* Composer */}
-                  <div style={{ background:T.card, border:"1px solid "+T.bord, borderRadius:18, padding:18 }}>
-                    <div style={{ display:"flex", gap:12, alignItems:"flex-start" }}>
-                      <Avatar initials="ME" color="#f0a500" size={40}/>
-                      <div style={{ flex:1 }}>
-                        {/* WhatsApp style input row */}
-                        <div style={{ display:"flex", alignItems:"flex-end", gap:8, background:"rgba(255,255,255,.03)", border:"1px solid rgba(255,255,255,.07)", borderRadius:14, padding:"10px 12px", transition:"border-color .2s" }}>
-                          <div style={{ flex:1 }}>
-                            {postImage && (
-                              <div style={{ position:"relative", marginBottom:8, display:"inline-block" }}>
-                                <img src={postImage} alt="" style={{ maxHeight:100, borderRadius:8, border:"1px solid rgba(255,255,255,.1)", display:"block" }}/>
-                                <button onClick={function(){setPostImage(null); setPostImageFile(null);}} style={{ position:"absolute", top:-6, right:-6, width:18, height:18, borderRadius:"50%", background:"#ef4444", border:"none", color:"#fff", cursor:"pointer", fontSize:"9px", display:"grid", placeItems:"center", fontWeight:900 }}>✕</button>
-                              </div>
-                            )}
-                            <textarea value={postText} onChange={function(e){setPostText(e.target.value);}}
-                              placeholder="Share something with the community..."
-                              style={{ width:"100%", minHeight:72, background:"none", border:"none", color:T.text, fontFamily:"Satoshi,sans-serif", fontSize:".86rem", outline:"none", resize:"none", lineHeight:1.6 }}
-                              onFocus={function(e){e.target.parentElement.parentElement.style.borderColor="rgba(240,165,0,.3)";}}
-                              onBlur={function(e){e.target.parentElement.parentElement.style.borderColor="rgba(255,255,255,.07)";}}/>
-                          </div>
-                          {/* 🖼️ icon */}
-                          <button onClick={function(){postImgRef.current&&postImgRef.current.click();}}
-                            style={{ background:"none", border:"none", cursor:"pointer", color:T.text3, fontSize:"1.2rem", padding:"4px 6px", borderRadius:8, flexShrink:0, transition:"color .15s", marginBottom:2 }}
-                            onMouseEnter={function(e){e.currentTarget.style.color=T.blue;}}
-                            onMouseLeave={function(e){e.currentTarget.style.color=T.text3;}}>
-                            🖼️
-                          </button>
-                          <input ref={postImgRef} type="file" accept="image/*" style={{ display:"none" }}
-                            onChange={function(e){var f=e.target.files[0];if(!f)return;setPostImageFile(f);setPostImage(URL.createObjectURL(f));e.target.value="";}}/>
-                          {/* Send button */}
-                          <button onClick={submitPost} disabled={!postText.trim()&&!postImage}
-                            style={{ width:38, height:38, borderRadius:"50%", border:"none", background:(postText.trim()||postImage)?"linear-gradient(135deg,#f0a500,#ff7a30)":"rgba(255,255,255,.06)", color:(postText.trim()||postImage)?"#030810":T.text3, cursor:(postText.trim()||postImage)?"pointer":"not-allowed", display:"grid", placeItems:"center", flexShrink:0, transition:"all .2s" }}>
-                            <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
-                          </button>
-                        </div>
-                        {/* Tag selector */}
-                        <div style={{ display:"flex", gap:6, flexWrap:"wrap", marginTop:10 }}>
-                          {Object.keys(TAG_COL).map(function(t) {
-                            var on = postTag===t;
-                            return (
-                              <button key={t} onClick={function(){setPostTag(t);}}
-                                style={{ padding:"4px 11px", borderRadius:99, fontSize:".68rem", fontWeight:700, cursor:"pointer", transition:"all .18s",
-                                  background:on?TAG_COL[t]+"22":"rgba(255,255,255,.04)",
-                                  border:"1px solid "+(on?TAG_COL[t]+"55":"rgba(255,255,255,.07)"),
-                                  color:on?TAG_COL[t]:T.text3 }}>{t}</button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Tag filter */}
-                  <div style={{ display:"flex", gap:6, flexWrap:"wrap" }}>
-                    {allTags.map(function(t) {
-                      var on = filterTag===t;
-                      var col = TAG_COL[t]||T.text2;
-                      return (
-                        <button key={t} onClick={function(){setFilterTag(t);}}
-                          style={{ padding:"5px 13px", borderRadius:99, fontSize:".72rem", fontWeight:700, cursor:"pointer", transition:"all .18s",
-                            background:on?col+"18":"rgba(255,255,255,.04)",
-                            border:"1px solid "+(on?col+"40":"rgba(255,255,255,.07)"),
-                            color:on?col:T.text3 }}>{t}</button>
-                      );
-                    })}
-                  </div>
                   {visiblePosts.map(function(post) {
-                    return <PostCard key={post.id} post={post} onLike={handleLike} onBookmark={handleBookmark} onReact={handleReact} onComment={handleComment}/>;
+                    return <PostCard key={post.id} post={post} onLike={handleLike} onBookmark={handleBookmark} onReact={handleReact} onComment={handleComment} currentUserName={meName}/>;
                   })}
                 </>
               )}
@@ -1270,6 +1244,54 @@ export default function Community() {
               </div>
             </div>
 
+              {/* Fixed bottom composer — only on feed tab */}
+              {tab==="feed" && (
+                <div style={{ position:"absolute", bottom:0, left:0, right:0, background:T.bg, borderTop:"1px solid "+T.bord, padding:"8px 16px 10px", zIndex:10 }}>
+                  {/* Tag filter row */}
+                  <div style={{ display:"flex", gap:5, flexWrap:"wrap", marginBottom:8 }}>
+                    {allTags.map(function(t) {
+                      var on = filterTag===t;
+                      var col = TAG_COL[t]||T.text2;
+                      return (
+                        <button key={t} onClick={function(){setFilterTag(t);}}
+                          style={{ padding:"3px 10px", borderRadius:99, fontSize:".68rem", fontWeight:700, cursor:"pointer", transition:"all .15s",
+                            background:on?col+"18":"rgba(255,255,255,.04)",
+                            border:"1px solid "+(on?col+"40":"rgba(255,255,255,.07)"),
+                            color:on?col:T.text3 }}>{t}</button>
+                      );
+                    })}
+                  </div>
+                  <div style={{ display:"flex", alignItems:"flex-end", gap:10 }}>
+                    <Avatar initials="ME" color="#f0a500" size={36}/>
+                    <div style={{ flex:1, background:"rgba(255,255,255,.05)", border:"1px solid rgba(255,255,255,.08)", borderRadius:22, padding:"8px 14px", display:"flex", alignItems:"flex-end", gap:8 }}>
+                      <div style={{ flex:1 }}>
+                        {postImage && (
+                          <div style={{ position:"relative", marginBottom:6, display:"inline-block" }}>
+                            <img src={postImage} alt="" style={{ maxHeight:80, borderRadius:8, border:"1px solid rgba(255,255,255,.1)", display:"block" }}/>
+                            <button onClick={function(){setPostImage(null); setPostImageFile(null);}} style={{ position:"absolute", top:-5, right:-5, width:16, height:16, borderRadius:"50%", background:"#ef4444", border:"none", color:"#fff", cursor:"pointer", fontSize:"8px", display:"grid", placeItems:"center" }}>✕</button>
+                          </div>
+                        )}
+                        <textarea value={postText} onChange={function(e){setPostText(e.target.value);}}
+                          placeholder="Share something with the community..."
+                          rows={1}
+                          style={{ width:"100%", background:"none", border:"none", color:T.text, fontFamily:"Satoshi,sans-serif", fontSize:".88rem", outline:"none", resize:"none", lineHeight:1.6, maxHeight:120, overflowY:"auto" }}/>
+                      </div>
+                      <button onClick={function(){postImgRef.current&&postImgRef.current.click();}}
+                        style={{ background:"none", border:"none", cursor:"pointer", color:T.text3, fontSize:"1.1rem", padding:"2px 4px", flexShrink:0, transition:"color .15s" }}
+                        onMouseEnter={function(e){e.currentTarget.style.color=T.blue;}}
+                        onMouseLeave={function(e){e.currentTarget.style.color=T.text3;}}>🖼️</button>
+                      <input ref={postImgRef} type="file" accept="image/*" style={{ display:"none" }}
+                        onChange={function(e){var f=e.target.files[0];if(!f)return;setPostImageFile(f);setPostImage(URL.createObjectURL(f));e.target.value="";}}/>
+                    </div>
+                    <button onClick={submitPost} disabled={!postText.trim()&&!postImage}
+                      style={{ width:40, height:40, borderRadius:"50%", border:"none", background:(postText.trim()||postImage)?"linear-gradient(135deg,#f0a500,#ff7a30)":"rgba(255,255,255,.06)", color:(postText.trim()||postImage)?"#030810":T.text3, cursor:(postText.trim()||postImage)?"pointer":"not-allowed", display:"grid", placeItems:"center", flexShrink:0, transition:"all .2s" }}>
+                      <svg width={16} height={16} viewBox="0 0 24 24" fill="currentColor"><path d="M2 21l21-9L2 3v7l15 2-15 2v7z"/></svg>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             {(tab==="feed"||tab==="rooms") && (
               <div style={{ width:240, flexShrink:0, borderLeft:"1px solid "+T.bord, overflowY:"auto", padding:"20px 16px", display:"flex", flexDirection:"column", gap:18 }}>
                 <div>
@@ -1291,7 +1313,10 @@ export default function Community() {
                 <div>
                   <div style={{ fontSize:".62rem", fontWeight:800, letterSpacing:".1em", textTransform:"uppercase", color:T.text3, marginBottom:10 }}>Trending</div>
                   <div style={{ display:"flex", flexWrap:"wrap", gap:7 }}>
-                    {["#DSA","#ReactJS","#ML","#AWS","#SystemDesign","#Python","#UIDesign"].map(function(tag) {
+                    {(communityStats.trendingTags.length > 0
+                      ? communityStats.trendingTags.slice(0,7).map(function(t){ return '#'+t.tag; })
+                      : ["#DSA","#ReactJS","#ML","#AWS","#SystemDesign","#Python","#UIDesign"]
+                    ).map(function(tag) {
                       return (
                         <span key={tag} style={{ padding:"4px 10px", borderRadius:99, fontSize:".7rem", fontWeight:600, background:"rgba(255,255,255,.04)", border:"1px solid rgba(255,255,255,.07)", color:T.text2, cursor:"pointer", transition:"all .2s" }}
                           onMouseEnter={function(e){e.currentTarget.style.borderColor="rgba(240,165,0,.3)";e.currentTarget.style.color=T.gold;}}
@@ -1304,7 +1329,11 @@ export default function Community() {
                 </div>
                 <div style={{ padding:16, borderRadius:14, background:"rgba(240,165,0,.06)", border:"1px solid rgba(240,165,0,.15)" }}>
                   <div style={{ fontSize:".62rem", fontWeight:800, letterSpacing:".1em", textTransform:"uppercase", color:T.gold, marginBottom:12 }}>Community Stats</div>
-                  {[["👥","Members","1,248"],["💬","Posts Today","84"],["🔥","Active Now","37"],["🏆","Top Streak","21 days"]].map(function(s) {
+                  {[
+                    ["👥","Members", communityStats.members.toLocaleString()],
+                    ["💬","Posts Today", communityStats.postsToday.toString()],
+                    ["📝","Total Posts", (communityStats.totalPosts||0).toString()],
+                  ].map(function(s) {
                     return (
                       <div key={s[1]} style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
                         <span style={{ fontSize:".75rem", color:T.text2 }}>{s[0]} {s[1]}</span>

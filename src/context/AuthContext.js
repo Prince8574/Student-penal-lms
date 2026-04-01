@@ -116,6 +116,13 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const refreshUser = async () => {
+    try {
+      const res = await authAPI.getMe();
+      setUser(res.data.data);
+    } catch {}
+  };
+
   const value = {
     user,
     loading,
@@ -125,6 +132,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     updateProfile,
     loginWithToken,
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

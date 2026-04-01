@@ -165,3 +165,39 @@ exports.addReply = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+// DELETE /api/posts/:id/comments/:cid
+exports.deleteComment = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+    const comment = post.comments.id(req.params.cid);
+    if (!comment) return res.status(404).json({ success: false, message: 'Comment not found' });
+    if (comment.author.toString() !== req.user.id.toString())
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    comment.deleteOne();
+    await post.save();
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+// PUT /api/posts/:id/comments/:cid
+exports.editComment = async (req, res) => {
+  try {
+    const { text } = req.body;
+    if (!text?.trim()) return res.status(400).json({ success: false, message: 'Text required' });
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ success: false, message: 'Post not found' });
+    const comment = post.comments.id(req.params.cid);
+    if (!comment) return res.status(404).json({ success: false, message: 'Comment not found' });
+    if (comment.author.toString() !== req.user.id.toString())
+      return res.status(403).json({ success: false, message: 'Not authorized' });
+    comment.text = text.trim();
+    await post.save();
+    res.json({ success: true, text: comment.text });
+  } catch (err) {
+    res.status(500).json({ success: false, message: err.message });
+  }
+};

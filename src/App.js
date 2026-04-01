@@ -18,6 +18,7 @@ import NotificationsPage from './frontend/Notifications/Notifications';
 import SettingsPage from './frontend/Settings/Settings';
 import EnrollPage from './frontend/Enroll/Enroll';
 import TestAuth from './TestAuth';
+import AIAssistant from './components/AIAssistant/AIAssistant';
 
 // Logged in ho to home, nahi to login
 const AuthRoute = ({ children }) => {
@@ -65,10 +66,16 @@ function App() {
       <Router>
         <div className="App">
           <AppRoutes />
+          <AIAssistantWrapper />
         </div>
       </Router>
     </AuthProvider>
   );
+}
+
+function AIAssistantWrapper() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <AIAssistant /> : null;
 }
 
 export default App;

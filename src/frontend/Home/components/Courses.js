@@ -291,7 +291,7 @@ function TopCourseCard({ course, rank, isEnrolled, onClick }) {
       }}>
         {course.thumbnail ? (
           <img
-            src={`http://localhost:5000/uploads/${course.thumbnail.split('/').pop()}`}
+            src={course.thumbnail.startsWith('http') ? course.thumbnail : `http://localhost:5000/uploads/${course.thumbnail.split('/').pop()}`}
             alt={course.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             onError={e => { e.target.style.display = 'none'; }}

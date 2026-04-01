@@ -39,9 +39,12 @@ app.use('/api/payments',    require('./routes/payments'));
 app.use('/api/posts',       require('./routes/posts'));
 app.use('/api/messages',    require('./routes/messages'));
 app.use('/api/upload',      require('./routes/upload'));
+app.use('/api/community',   require('./routes/community'));
+app.use('/api/ai',          require('./routes/ai'));
 
 // Serve uploaded images
 app.use('/uploads', express.static(__dirname + '/uploads'));
+app.use('/uploads/avatars', express.static(__dirname + '/uploads/avatars'));
 app.use('/certificates', express.static(__dirname + '/certificates'));
 
 // Health Check

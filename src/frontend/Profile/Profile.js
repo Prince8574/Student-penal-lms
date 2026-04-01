@@ -15,6 +15,7 @@ import SectionHeader from './components/SectionHeader';
 import PomodoroTimer from './components/PomodoroTimer';
 import HeatMap from './components/HeatMap';
 import Avatar from './components/Avatar';
+import AvatarCropModal from './components/AvatarCropModal';
 
 /* ---------------------------------------
 MAIN COMPONENT
@@ -22,7 +23,7 @@ MAIN COMPONENT
 export default function LearnVerseProfile() {
 const navigate = useNavigate();
 const location = useLocation();
-const { user } = useAuth();
+const { user, refreshUser } = useAuth();
 const bgRef = useRef(null);
 const coverRef = useRef(null);
 
@@ -34,6 +35,37 @@ const activeNav = pathToNav[location.pathname] || 'Profile';
 const [xpVisible, setXpVisible] = useState(false);
 const xpRef = useRef(null);
 const [enrollments, setEnrollments] = useState([]);
+const [showCropModal, setShowCropModal] = useState(false);
+const [avatarUrl, setAvatarUrl] = useState(null);
+
+// Load avatar from DB on mount
+useEffect(function() {
+  if (user?.avatar && user.avatar !== 'default-avatar.png') {
+    setAvatarUrl(user.avatar);
+  }
+}, [user?.avatar]);
+
+function handleAvatarSave(blob) {
+  var fd = new FormData();
+  fd.append('avatar', blob, 'avatar.jpg');
+  // Show preview immediately
+  var previewUrl = URL.createObjectURL(blob);
+  setAvatarUrl(previewUrl);
+  setShowCropModal(false);
+  fetch('http://localhost:5001/api/users/avatar', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
+    body: fd,
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      if (res.success && res.url) {
+        setAvatarUrl(res.url);
+        if (refreshUser) refreshUser();
+      }
+    })
+    .catch(function() {});
+}
 
 useEffect(() => {
   enrollmentAPI.getMyEnrollments()
@@ -98,6 +130,7 @@ return () => obs.disconnect();
 return (
 <div className="profile-page" style={{ background: T.bg, color: T.text, fontFamily: 'inherit', minHeight: '100vh', width: '100%', margin: 0, padding: 0, overflowX: 'hidden', position: 'relative' }}>
 <Cursor />
+{showCropModal && <AvatarCropModal onClose={function(){setShowCropModal(false);}} onSave={handleAvatarSave}/>}
 
 {/* BG Canvas */}
 <canvas ref={bgRef} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', width: '100vw', height: '100vh' }} />
@@ -162,8 +195,18 @@ return (
 <div style={{ display: 'flex', alignItems: 'flex-end', gap: 24 }}>
 {/* Avatar */}
 <div style={{ position: 'relative', width: 128, height: 128, flexShrink: 0 }}>
-<div style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `4px solid ${T.gold}`, overflow: 'hidden', background: 'linear-gradient(145deg,#0c1e3a,#190c30)', zIndex: 2 }}>
-<Avatar />
+<div onClick={function(){setShowCropModal(true);}}
+  style={{ position: 'absolute', inset: 0, borderRadius: '50%', border: `4px solid ${T.gold}`, overflow: 'hidden', background: avatarUrl || user?.avatar ? 'transparent' : 'linear-gradient(145deg,#0c1e3a,#190c30)', zIndex: 2, cursor: 'pointer' }}>
+  {avatarUrl || user?.avatar
+    ? <img src={avatarUrl || user.avatar} alt="avatar" style={{ width:'100%', height:'100%', objectFit:'cover' }}/>
+    : <Avatar />
+  }
+  {/* Hover overlay */}
+  <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,.45)', display:'flex', alignItems:'center', justifyContent:'center', opacity:0, transition:'opacity .2s', borderRadius:'50%' }}
+    onMouseEnter={function(e){e.currentTarget.style.opacity='1';}}
+    onMouseLeave={function(e){e.currentTarget.style.opacity='0';}}>
+    <span style={{ fontSize:'1.4rem' }}>📷</span>
+  </div>
 </div>
 <div style={{ position: 'absolute', bottom: 8, right: 6, zIndex: 4, width: 20, height: 20, borderRadius: '50%', background: T.green, border: `3px solid ${T.bg}` }} />
 <div style={{ position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)', padding: '3px 11px', borderRadius: 20, background: T.gold, color: '#030810', fontSize: '.6rem', fontWeight: 900, letterSpacing: '.07em', textTransform: 'uppercase', whiteSpace: 'nowrap', zIndex: 5 }}>🎓 {user?.role?.toUpperCase() || 'STUDENT'}</div>

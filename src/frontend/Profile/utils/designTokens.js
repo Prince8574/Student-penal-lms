@@ -5,41 +5,41 @@ DESIGN TOKENS - SHARED ACROSS PROFILE COMPONENTS
 // Color palette
 export const T = {
   // Background colors
-  bg: "#02060f", 
-  s1: "#07101f", 
-  s2: "#0b1526", 
-  card: "rgba(11,20,42,0.88)",
-  
+  bg: "#0a0f1e",
+  s1: "#0d1526",
+  s2: "#111827",
+  card: "rgba(13,20,40,0.92)",
+
   // Brand colors
-  gold: "#f0a500", 
-  gold2: "#fcd34d", 
-  orange: "#ff7a30",
-  teal: "#00d4aa", 
-  blue: "#3b82f6", 
-  purple: "#a78bfa",
-  pink: "#f472b6", 
-  green: "#4ade80", 
+  gold: "#f59e0b",
+  gold2: "#fbbf24",
+  orange: "#f97316",
+  teal: "#06b6d4",
+  blue: "#6366f1",
+  purple: "#8b5cf6",
+  pink: "#ec4899",
+  green: "#10b981",
   red: "#ef4444",
-  
+
   // Text colors
-  text: "#f0f6ff", 
-  text2: "#8899b8", 
-  text3: "#3d4f6e",
-  
+  text: "#f1f5f9",
+  text2: "#94a3b8",
+  text3: "#475569",
+
   // Border colors
-  bord: "rgba(255,255,255,0.06)", 
-  bordGold: "rgba(240,165,0,0.22)",
+  bord: "rgba(255,255,255,0.07)",
+  bordGold: "rgba(245,158,11,0.25)",
 };
 
 // Gradient definitions
 export const G = {
-  gold: "linear-gradient(135deg,#f0a500,#ff7a30)",
-  teal: "linear-gradient(135deg,#00d4aa,#3b82f6)",
-  green: "linear-gradient(135deg,#4ade80,#00d4aa)",
-  purple: "linear-gradient(135deg,#a78bfa,#f472b6)",
-  pink: "linear-gradient(135deg,#f472b6,#ff7a30)",
-  blue: "linear-gradient(135deg,#3b82f6,#a78bfa)",
-  orange: "linear-gradient(135deg,#ff7a30,#f472b6)",
+  gold: "linear-gradient(135deg,#f59e0b,#f97316)",
+  teal: "linear-gradient(135deg,#06b6d4,#6366f1)",
+  green: "linear-gradient(135deg,#10b981,#06b6d4)",
+  purple: "linear-gradient(135deg,#8b5cf6,#ec4899)",
+  pink: "linear-gradient(135deg,#ec4899,#f97316)",
+  blue: "linear-gradient(135deg,#6366f1,#8b5cf6)",
+  orange: "linear-gradient(135deg,#f97316,#ec4899)",
 };
 
 // Typography

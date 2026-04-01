@@ -41,6 +41,7 @@ export default function TopBar({ title, collapsed, setCollapsed, children }) {
       zIndex: 100,
       animation: "fadeUp .5s ease both",
     }}>
+      <style>{`@keyframes topbar-av-spin { to { transform: rotate(360deg); } }`}</style>
 
       {/* Sidebar toggle */}
       <button onClick={() => setCollapsed?.(s => !s)}
@@ -71,20 +72,31 @@ export default function TopBar({ title, collapsed, setCollapsed, children }) {
       </button>
 
       {/* User avatar — click → profile */}
-      <div onClick={() => navigate("/profile")}
-        title={userName}
-        style={{
-          width: 36, height: 36, borderRadius: 10,
-          background: "linear-gradient(135deg,rgba(240,165,0,.22),rgba(255,122,48,.14))",
-          border: "1px solid rgba(240,165,0,.22)",
-          display: "grid", placeItems: "center",
-          fontSize: ".68rem", fontWeight: 900, color: S.gold,
-          cursor: "pointer", flexShrink: 0, transition: "all .18s",
-          position: "relative",
-        }}
-        onMouseEnter={e => { e.currentTarget.style.background = "linear-gradient(135deg,rgba(240,165,0,.35),rgba(255,122,48,.25))"; }}
-        onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(135deg,rgba(240,165,0,.22),rgba(255,122,48,.14))"; }}>
-        {userInitials}
+      <div style={{ position:"relative", width:36, height:36, flexShrink:0, cursor:"pointer" }} onClick={() => navigate("/profile")} title={userName}>
+        {/* Rotating ring */}
+        <div style={{
+          position:"absolute", inset:-3, borderRadius:"50%",
+          background:"conic-gradient(#f0a500, #00d4aa, #f0a500)",
+          animation:"topbar-av-spin 3s linear infinite",
+          WebkitMask:"radial-gradient(farthest-side, transparent calc(100% - 2px), #fff calc(100% - 1px))",
+          mask:"radial-gradient(farthest-side, transparent calc(100% - 2px), #fff calc(100% - 1px))",
+          zIndex:1,
+        }}/>
+        {/* Avatar circle */}
+        <div style={{
+          position:"absolute", inset:0, borderRadius:"50%",
+          background: user?.avatar && !user.avatar.includes('default-avatar') ? 'transparent' : "linear-gradient(135deg,rgba(240,165,0,.22),rgba(255,122,48,.14))",
+          display:"grid", placeItems:"center",
+          fontSize:".68rem", fontWeight:900, color:S.gold,
+          overflow:"hidden", zIndex:2,
+        }}>
+          {user?.avatar && !user.avatar.includes('default-avatar')
+            ? <img src={user.avatar} alt="avatar" style={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:'50%', display:'block' }}/>
+            : userInitials
+          }
+        </div>
+        {/* Online dot */}
+        <div style={{ position:"absolute", bottom:0, right:0, width:9, height:9, borderRadius:"50%", background:"#4ade80", border:`2px solid ${S.bg}`, zIndex:3 }}/>
       </div>
     </header>
   );

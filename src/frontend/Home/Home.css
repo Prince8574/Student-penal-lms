@@ -206,7 +206,7 @@ nav {
   display: block;
   overflow: hidden;
   position: relative;
-  background: linear-gradient(135deg, #0d2240, #1a0e3a);
+  /* background: linear-gradient(135deg, #0d2240, #1a0e3a); */
 }
 
 .av-online {

@@ -26,9 +26,7 @@ function Header() {
         <a href="#" className="nav-link active" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Home</a>
         <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/explore'); }}>Explore</a>
         <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/course/1'); }}>Courses</a>
-        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); }}>Paths</a>
-        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); }}>Community</a>
-        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); }}>Pricing</a>
+        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/community'); }}>Community</a>
       </nav>
 
       <div className="header-right">
@@ -51,7 +49,10 @@ function Header() {
             >
             <div className="av-ring"></div>
             <div className="av-img">
-              <AvatarSVG />
+              {user?.avatar && !user.avatar.includes('default-avatar')
+                ? <img src={user.avatar} alt="avatar" style={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:'50%', display:'block' }}/>
+                : <AvatarSVG />
+              }
             </div>
             <div className="av-online"></div>
             
@@ -59,17 +60,20 @@ function Header() {
               <div className="av-menu">
                 <div className="av-head">
                   <div className="av-head-img">
-                    <AvatarSVGSmall />
+                    {user?.avatar && !user.avatar.includes('default-avatar')
+                      ? <img src={user.avatar} alt="avatar" style={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:'50%', display:'block' }}/>
+                      : <AvatarSVGSmall />
+                    }
                   </div>
                   <div>
                     <div className="av-head-name">{user?.name || 'User'}</div>
-                    <div className="av-head-badge">⭐ Pro Learner</div>
                   </div>
                 </div>
                 <div className="av-item" onClick={() => navigate('/profile')}><span>👤</span> View Profile</div>
                 <div className="av-item" onClick={() => navigate('/explore')}><span>📚</span> My Courses</div>
-                <div className="av-item" onClick={() => navigate('/assignments')}><span>🏆</span> Achievements</div>
-                <div className="av-item"><span>📊</span> Progress</div>
+                
+                
+                
                 <div className="av-item"><span>👥</span> Community</div>
                 <div className="av-sep"></div>
                 <div className="av-item" onClick={() => navigate('/settings')}><span>⚙️</span> Settings</div>
