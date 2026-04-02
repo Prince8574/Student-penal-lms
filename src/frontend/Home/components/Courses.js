@@ -106,7 +106,7 @@ function Courses() {
                 course={course}
                 rank={i + 1}
                 isEnrolled={!!enrollmentMap[course._id]}
-                onClick={() => navigate(`/course/${course._id}`)}
+                onClick={() => navigate(`/my-courses`)}
               />
             ))
           )}

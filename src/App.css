@@ -28,6 +28,23 @@
   color: #61dafb;
 }
 
+/* ── Theme CSS Variables ── */
+:root {
+  --bg: #02060f;
+  --bg2: #0c1628;
+  --accent: #f0a500;
+  --accent-color: #f0a500;
+  --font-size-base: 15px;
+}
+
+body {
+  background-color: var(--bg) !important;
+  transition: background-color 0.4s ease;
+}
+
+[data-theme="midnight"] body { background-color: #000510 !important; }
+[data-theme="aurora"]   body { background-color: #050a18 !important; }
+[data-theme="ocean"]    body { background-color: #020b12 !important; }
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

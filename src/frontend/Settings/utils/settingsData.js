@@ -1,14 +1,12 @@
 import { T } from './designTokens';
 
 export const TABS = [
-  { id: 'account', icon: '👤', label: 'Account', color: T.gold },
   { id: 'appearance', icon: '🎨', label: 'Appearance', color: T.purple },
   { id: 'notifications', icon: '🔔', label: 'Notifications', color: T.teal },
   { id: 'privacy', icon: '🔒', label: 'Privacy', color: T.blue },
   { id: 'security', icon: '🛡️', label: 'Security', color: T.green },
   { id: 'learning', icon: '📚', label: 'Learning', color: T.amber },
   { id: 'accessibility', icon: '♿', label: 'Accessibility', color: T.cyan },
-  { id: 'integrations', icon: '🔗', label: 'Integrations', color: T.pink },
 ];
 
 export const NAV = [

@@ -134,7 +134,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                   setActive(item.id);
                   // Navigate to different pages based on item id
                   if (item.id === "courses") {
-                    navigate('/course/1');
+                    navigate('/my-courses');
                   } else if (item.id === "profile") {
                     navigate('/profile');
                   } else if (item.id === "dash") {

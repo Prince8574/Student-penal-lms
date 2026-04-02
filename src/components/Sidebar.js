@@ -23,14 +23,12 @@ const NAV = [
       { i: "🔍", l: "Explore",      id: "explore",     route: "/explore" },
       { i: "📝", l: "Assignments",  id: "assign",      route: "/assignments", badge: 3 },
       { i: "🏅", l: "Grades",       id: "grades",  route: "/grades" },
-      { i: "📅", l: "Schedule",     id: "sched" },
     ],
   },
   {
     g: "COMMUNITY",
     items: [
       { i: "🔔", l: "Notifications", id: "notif",  badge: 5, route: "/notifications" },
-      { i: "🏆", l: "Leaderboard",   id: "leader" },
       { i: "👥", l: "Community",     id: "comm", route: "/community" },
     ],
   },

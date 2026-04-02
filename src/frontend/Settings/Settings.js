@@ -9,14 +9,12 @@ import { useAuth } from '../../context/AuthContext';
 import Cursor from '../Explore/components/Cursor';
 import Sidebar from '../../components/Sidebar';
 import { Toast } from './components/Toast';
-import { AccountPanel } from './components/panels/AccountPanel';
 import { AppearancePanel } from './components/panels/AppearancePanel';
 import { NotificationsPanel } from './components/panels/NotificationsPanel';
 import { PrivacyPanel } from './components/panels/PrivacyPanel';
 import { SecurityPanel } from './components/panels/SecurityPanel';
 import { LearningPanel } from './components/panels/LearningPanel';
 import { AccessibilityPanel } from './components/panels/AccessibilityPanel';
-import { IntegrationsPanel } from './components/panels/IntegrationsPanel';
 
 const API_URL = 'http://localhost:5001/api/settings';
 
@@ -32,7 +30,7 @@ export default function SettingsPage() {
   const contentRef = useRef(null);
 
   const [collapsed, setCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState('account');
+  const [activeTab, setActiveTab] = useState('appearance');
   const [toast, setToast] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -99,6 +97,29 @@ export default function SettingsPage() {
     certReminder: true,
     pomodoroDefault: '25 min',
   });
+
+  // Apply theme to document when form.theme changes
+  useEffect(() => {
+    const themeMap = {
+      dark:     { '--bg': '#02060f', '--bg2': '#0c1628', '--accent': '#f0a500' },
+      midnight: { '--bg': '#000510', '--bg2': '#080e22', '--accent': '#00d4aa' },
+      aurora:   { '--bg': '#050a18', '--bg2': '#0d1530', '--accent': '#a78bfa' },
+      ocean:    { '--bg': '#020b12', '--bg2': '#061828', '--accent': '#22d3ee' },
+    };
+    const vars = themeMap[form.theme] || themeMap.dark;
+    Object.entries(vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+    document.documentElement.setAttribute('data-theme', form.theme);
+  }, [form.theme]);
+
+  // Apply accent color
+  useEffect(() => {
+    if (form.accent) document.documentElement.style.setProperty('--accent-color', form.accent);
+  }, [form.accent]);
+
+  // Apply font size
+  useEffect(() => {
+    document.documentElement.style.setProperty('--font-size-base', `${form.fontSize}px`);
+  }, [form.fontSize]);
 
   const showToast = useCallback((msg, type = 'success') => {
     setToast({ msg, type });
@@ -345,8 +366,6 @@ export default function SettingsPage() {
   const renderPanel = () => {
     const props = { form, setForm, showToast };
     switch (activeTab) {
-      case 'account':
-        return <AccountPanel {...props} />;
       case 'appearance':
         return <AppearancePanel {...props} />;
       case 'notifications':
@@ -359,8 +378,6 @@ export default function SettingsPage() {
         return <LearningPanel {...props} />;
       case 'accessibility':
         return <AccessibilityPanel {...props} />;
-      case 'integrations':
-        return <IntegrationsPanel {...props} />;
       default:
         return null;
     }
@@ -371,7 +388,7 @@ export default function SettingsPage() {
       style={{
         display: 'flex',
         height: '100vh',
-        background: T.bg,
+        background: 'var(--bg, #02060f)',
         color: T.text,
         fontFamily: 'Satoshi, sans-serif',
         overflow: 'hidden',
@@ -804,7 +821,6 @@ export default function SettingsPage() {
               <div style={{ fontSize: '.82rem', color: T.text3, marginLeft: 46 }}>
                 {
                   {
-                    account: 'Manage your profile, identity, and account preferences',
                     appearance: 'Customize the look and feel of LearnVerse',
                     notifications: 'Control how and when you receive notifications',
                     privacy: 'Manage your visibility and data sharing preferences',
@@ -812,8 +828,7 @@ export default function SettingsPage() {
                     learning: 'Personalize your learning experience and schedule',
                     accessibility: 'Adjust accessibility options for a better experience',
                     integrations: 'Connect LearnVerse with your favorite tools',
-                  }[activeTab]
-                }
+                  }[activeTab]                }
               </div>
             </div>
 

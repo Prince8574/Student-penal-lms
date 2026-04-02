@@ -37,6 +37,8 @@ const xpRef = useRef(null);
 const [enrollments, setEnrollments] = useState([]);
 const [showCropModal, setShowCropModal] = useState(false);
 const [avatarUrl, setAvatarUrl] = useState(null);
+const [certCount, setCertCount] = useState(0);
+const [assignmentCerts, setAssignmentCerts] = useState([]);
 
 // Load avatar from DB on mount
 useEffect(function() {
@@ -73,6 +75,24 @@ useEffect(() => {
     .catch(() => {});
 }, []);
 
+// Fetch real certificate count from grades
+useEffect(() => {
+  const token = localStorage.getItem('token');
+  if (!token) return;
+  fetch('http://localhost:5001/api/student/assignments/grades', {
+    headers: { Authorization: `Bearer ${token}` }
+  })
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        const certs = (res.data || []).filter(g => g.certificateId);
+        setCertCount(certs.length);
+        setAssignmentCerts(certs);
+      }
+    })
+    .catch(() => {});
+}, []);
+
 // Use logged-in user data
 const displayName = user?.name || 'Student';
 const displayUsername = user?.username || '';
@@ -85,9 +105,9 @@ const memberSince = user?.createdAt
   ? new Date(user.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' })
   : null;
 
-// Real stats from user data
-const enrolledCount = user?.enrolledCourses?.length ?? 0;
-const completedCount = user?.completedCourses?.length ?? 0;
+// Real stats from enrollments data
+const enrolledCount = enrollments.length || user?.enrolledCourses?.length || 0;
+const completedCount = enrollments.filter(e => e.status === 'completed' || e.progress === 100).length || user?.completedCourses?.length || 0;
 
 // Build chips from real user data only
 const dynamicChips = [
@@ -256,7 +276,7 @@ onMouseLeave={e => { e.currentTarget.style.borderColor = T.bord; e.currentTarget
 <div style={{ background: T.card, border: `1px solid ${T.bord}`, borderRadius: 18, overflow: 'hidden', backdropFilter: 'blur(20px)', marginBottom: 20, display: 'grid', gridTemplateColumns: 'repeat(3,1fr)' }}>
 <StatBox num={enrolledCount} label="Courses Enrolled" color={T.gold} barColor={T.gold} delay={200} />
 <StatBox num={completedCount} label="Completed" color={T.teal} barColor={T.teal} delay={350} />
-<StatBox num={enrollments.filter(e => e.status === 'completed').length} label="Certificates" color={T.blue} barColor={T.blue} delay={500} />
+<StatBox num={certCount} label="Certificates" color={T.blue} barColor={T.blue} delay={500} />
 </div>
 
 {/* GRID */}
@@ -420,24 +440,41 @@ return (
 
 
 {/* Completed Courses as Certificates */}
-{enrollments.filter(e => e.status === 'completed').length > 0 && (
+{(enrollments.filter(e => e.status === 'completed').length > 0 || assignmentCerts.length > 0) && (
 <Card delay={400}>
 <SectionHeader title="Certificates Earned" />
 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-{enrollments.filter(e => e.status === 'completed').map((e, i) => (
-<div key={i} className="certrow" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,.02)', border: `1px solid ${T.bord}`, cursor: 'pointer', transition: 'all .22s' }}>
-<div style={{ width: 46, height: 46, borderRadius: 12, background: 'rgba(240,165,0,.08)', border: '1px solid rgba(240,165,0,.18)', display: 'grid', placeItems: 'center', fontSize: 20, flexShrink: 0 }}>🎓</div>
-<div style={{ flex: 1, minWidth: 0 }}>
-<div style={{ fontWeight: 700, fontSize: '.87rem', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.course?.title}</div>
-<div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: '.72rem', color: T.text2 }}>
-<span>LearnVerse</span>
-<span>·</span>
-<span style={{ color: T.green, fontWeight: 700 }}>✓ Completed</span>
-{e.completedAt && <><span>·</span><span>{new Date(e.completedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}</span></>}
-</div>
-</div>
-</div>
-))}
+  {/* Course completion certificates */}
+  {enrollments.filter(e => e.status === 'completed').map((e, i) => (
+  <div key={i} className="certrow" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,.02)', border: `1px solid ${T.bord}`, cursor: 'pointer', transition: 'all .22s' }}>
+  <div style={{ width: 46, height: 46, borderRadius: 12, background: 'rgba(240,165,0,.08)', border: '1px solid rgba(240,165,0,.18)', display: 'grid', placeItems: 'center', fontSize: 20, flexShrink: 0 }}>🎓</div>
+  <div style={{ flex: 1, minWidth: 0 }}>
+  <div style={{ fontWeight: 700, fontSize: '.87rem', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.course?.title}</div>
+  <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: '.72rem', color: T.text2 }}>
+  <span>LearnVerse</span><span>·</span>
+  <span style={{ color: T.green, fontWeight: 700 }}>✓ Course Completed</span>
+  {e.completedAt && <><span>·</span><span>{new Date(e.completedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}</span></>}
+  </div>
+  </div>
+  </div>
+  ))}
+  {/* Assignment certificates */}
+  {assignmentCerts.map((g, i) => {
+    const pct = Math.round((g.score / (g.maxScore || 100)) * 100);
+    return (
+    <div key={'cert-' + i} className="certrow" style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px', borderRadius: 14, background: 'rgba(255,255,255,.02)', border: `1px solid ${T.bord}`, transition: 'all .22s' }}>
+    <div style={{ width: 46, height: 46, borderRadius: 12, background: 'rgba(124,47,255,.08)', border: '1px solid rgba(124,47,255,.18)', display: 'grid', placeItems: 'center', fontSize: 20, flexShrink: 0 }}>🏆</div>
+    <div style={{ flex: 1, minWidth: 0 }}>
+    <div style={{ fontWeight: 700, fontSize: '.87rem', marginBottom: 4, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{g.courseName || g.assignmentTitle}</div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontSize: '.72rem', color: T.text2 }}>
+    <span style={{ color: '#a78bfa', fontWeight: 700 }}>Assignment</span><span>·</span>
+    <span style={{ color: T.green, fontWeight: 700 }}>Score: {pct}%</span>
+    {g.gradedAt && <><span>·</span><span>{new Date(g.gradedAt).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' })}</span></>}
+    </div>
+    </div>
+    </div>
+    );
+  })}
 </div>
 </Card>
 )}

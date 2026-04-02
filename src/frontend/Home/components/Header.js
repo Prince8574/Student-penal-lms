@@ -25,7 +25,7 @@ function Header() {
       <nav>
         <a href="#" className="nav-link active" onClick={(e) => { e.preventDefault(); navigate('/'); }}>Home</a>
         <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/explore'); }}>Explore</a>
-        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/course/1'); }}>Courses</a>
+        <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/my-courses'); }}>Courses</a>
         <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); navigate('/community'); }}>Community</a>
       </nav>
 

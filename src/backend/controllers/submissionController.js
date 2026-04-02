@@ -39,6 +39,8 @@ exports.submitAssignment = async (req, res) => {
       submission.status = 'submitted';
       submission.submittedAt = new Date();
       submission.files = files;
+      submission.assignmentTitle = assignment.title || '';
+      submission.courseName = assignment.courseName || assignment.course || '';
       submission.feedback = 'Under review — results expected in 2 days';
       await submission.save();
     } else {
@@ -46,6 +48,8 @@ exports.submitAssignment = async (req, res) => {
       submission = await Submission.create({
         assignment: req.params.assignmentId,
         student: req.user.id,
+        assignmentTitle: assignment.title || '',
+        courseName: assignment.courseName || assignment.course || '',
         status: 'submitted',
         submittedAt: new Date(),
         files,
@@ -140,7 +144,7 @@ exports.gradeSubmission = async (req, res) => {
     const finalScore    = score   !== undefined ? Number(score)   : Number(grade);
     const finalMaxScore = maxScore !== undefined ? Number(maxScore) : (assignmentDoc?.maxScore || assignmentDoc?.points || 100);
     const assignTitle   = submission.assignmentTitle || assignmentDoc?.title || 'Assignment';
-    const courseName    = submission.courseName      || assignmentDoc?.courseName || '';
+    const courseName    = submission.courseName      || assignmentDoc?.courseName || assignmentDoc?.course || '';
 
     // Generate certificate
     const certificateId   = generateCertificateId();

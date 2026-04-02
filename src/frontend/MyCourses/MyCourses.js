@@ -46,148 +46,114 @@ function MyCoursesCard({ enrollment, idx }) {
     return function() { obs.disconnect(); };
   }, [idx]);
 
-  var raw    = enrollment.course || {};
-  var pct    = Math.round(enrollment.progress || 0);
-  var status = pct === 100 ? "completed" : pct > 0 ? "in-progress" : "not-started";
-
-  var accentMap = {
-    "Web Dev": "#4F6EF7", "AI / ML": "#A855F7", "Cloud": "#38BDF8",
-    "Design": "#F472B6", "DSA": "#34D399", "Data Science": "#FBBF24",
-    "Mobile Dev": "#60A5FA", "DevOps": "#0EB5AA",
-  };
-  var accent = accentMap[raw.category] || "#4F6EF7";
-
-  var disc = (raw.originalPrice > raw.price)
-    ? Math.round((1 - raw.price / raw.originalPrice) * 100)
-    : 0;
-
-  var statusColor = status === "completed" ? T.green : status === "in-progress" ? T.amber : T.t2;
-  var statusLabel = status === "completed" ? "✓ Completed" : status === "in-progress" ? "▶ In Progress" : "○ Not Started";
-
-  var title     = raw.title || "Untitled Course";
-  var instructor = typeof raw.instructor === "object" ? (raw.instructor && raw.instructor.name) || "Instructor" : raw.instructor || "Instructor";
-  var category  = raw.category || "Course";
-  var level     = raw.level || "Beginner";
-  var duration  = raw.duration || "—";
-  var rating    = raw.rating || 0;
-  var reviews   = raw.reviews || 0;
-  var students  = raw.enrolledStudents || 0;
-  var price     = raw.price || 0;
-  var original  = raw.originalPrice || raw.price || 0;
-  var tags      = Array.isArray(raw.tags)
-    ? raw.tags.map(function(t) { return typeof t === "object" ? (t.name || "") : String(t); })
-    : [];
+  var raw      = enrollment.course || {};
+  var pct      = Math.round(enrollment.progress || 0);
+  var accentMap = { "Web Dev":"#4F6EF7","AI / ML":"#A855F7","Cloud":"#38BDF8","Design":"#F472B6","DSA":"#34D399","Data Science":"#FBBF24","Mobile Dev":"#60A5FA","DevOps":"#0EB5AA" };
+  var accent   = accentMap[raw.category] || "#4F6EF7";
+  var title    = raw.title || "Untitled Course";
+  var instructorName = typeof raw.instructor === "object" ? (raw.instructor?.name || "Instructor") : (raw.instructor || "Instructor");
+  var initials = instructorName.split(" ").map(function(n){return n[0];}).join("").slice(0,2).toUpperCase();
+  var category = raw.category || "Course";
+  var level    = raw.level || "Beginner";
+  var duration = raw.duration || "—";
+  var lessons  = raw.curriculum ? raw.curriculum.reduce(function(a,s){return a+(s.lessons?.length||0);},0) : 0;
+  var rating   = raw.rating || 0;
+  var reviews  = raw.reviews || 0;
+  var students = raw.enrolledStudents || 0;
+  var tags     = Array.isArray(raw.tags) ? raw.tags.map(function(t){return typeof t==="object"?(t.name||""):String(t);}) : [];
   var thumbnail = raw.thumbnail || "";
-  var bg        = raw.bg || ("linear-gradient(135deg," + accent + "18," + accent + "06)");
-  var icon      = raw.emoji || "📘";
-  var badge     = raw.badge || "Enrolled";
-  var courseId  = raw._id || enrollment.courseId;
+  var bg       = raw.bg || ("linear-gradient(135deg,"+accent+"18,"+accent+"06)");
+  var icon     = raw.emoji || "📘";
+  var courseId = raw._id || enrollment.courseId;
 
   return (
     <div ref={ref} className="course-card"
-      onClick={function() { navigate("/learn/" + courseId); }}
-      style={{
-        opacity: vis ? 1 : 0,
-        transform: vis ? "translateY(0)" : "translateY(22px)",
-        transition: "opacity .55s " + (idx * 0.06) + "s, transform .55s " + (idx * 0.06) + "s cubic-bezier(.4,0,.2,1)",
-      }}>
+      onClick={function() { navigate("/learn/"+courseId); }}
+      style={{ opacity:vis?1:0, transform:vis?"translateY(0)":"translateY(22px)", transition:"opacity .55s "+(idx*0.06)+"s, transform .55s "+(idx*0.06)+"s cubic-bezier(.4,0,.2,1)" }}>
 
-      {/* Thumbnail — identical to CourseCard */}
-      <div style={{ height: 155, background: bg, position: "relative", overflow: "hidden" }}>
-        {thumbnail ? (
-          <img src={thumbnail} alt={title}
-            style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", zIndex:0 }} />
-        ) : (
-          <>
-            <div style={{ position:"absolute", inset:0, background:"radial-gradient(ellipse 65% 80% at 30% 40%," + accent + "28,transparent)" }} />
-            <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
-              <span style={{ fontSize:"3.2rem", opacity:.16, filter:"blur(1px)", animation:"float 4s ease-in-out infinite" }}>{icon}</span>
-            </div>
-            <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-55%)", width:58, height:58, borderRadius:15, background:"linear-gradient(135deg," + accent + "1a," + accent + "36)", border:"1.5px solid " + accent + "44", display:"grid", placeItems:"center", backdropFilter:"blur(8px)", zIndex:2 }}>
-              <span style={{ fontSize:"1.7rem" }}>{icon}</span>
-            </div>
-          </>
-        )}
-        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom,transparent 35%,rgba(0,0,0,.7))", zIndex:1 }} />
-        <div style={{ position:"absolute", top:11, left:11, zIndex:3, display:"flex", gap:6 }}>
-          <BadgePill text={badge} />
-        </div>
-        <div style={{ position:"absolute", top:11, right:11, zIndex:3, padding:"3px 8px", borderRadius:6,
-          background:"rgba(0,0,0,.55)", backdropFilter:"blur(6px)", fontSize:".63rem", fontWeight:700,
-          color:T.text2, border:"1px solid rgba(255,255,255,.08)" }}>
-          {level}
+      {/* Thumbnail */}
+      <div style={{ height:168, background:bg, position:"relative", overflow:"hidden" }}>
+        {thumbnail
+          ? <img src={thumbnail} alt={title} style={{ position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",zIndex:0 }}/>
+          : <>
+              <div style={{ position:"absolute",inset:0,background:"radial-gradient(ellipse 65% 80% at 30% 40%,"+accent+"28,transparent)" }}/>
+              <div style={{ position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center" }}>
+                <span style={{ fontSize:"3.2rem",opacity:.16,filter:"blur(1px)" }}>{icon}</span>
+              </div>
+              <div style={{ position:"absolute",top:"50%",left:"50%",transform:"translate(-50%,-55%)",width:58,height:58,borderRadius:15,background:"linear-gradient(135deg,"+accent+"1a,"+accent+"36)",border:"1.5px solid "+accent+"44",display:"grid",placeItems:"center",backdropFilter:"blur(8px)",zIndex:2 }}>
+                <span style={{ fontSize:"1.7rem" }}>{icon}</span>
+              </div>
+            </>
+        }
+        <div style={{ position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 35%,rgba(0,0,0,.7))",zIndex:1 }}/>
+        {/* Progress bar at bottom */}
+        <div style={{ position:"absolute",bottom:0,left:0,right:0,zIndex:3 }}>
+          <div style={{ height:3,background:"rgba(0,0,0,.4)" }}>
+            <div style={{ height:"100%",width:pct+"%",background:pct===100?"linear-gradient(90deg,#22c55e,#00d4aa)":"linear-gradient(90deg,#f0a500,#ff9d45)",transition:"width 1.5s ease" }}/>
+          </div>
         </div>
       </div>
 
-      {/* Body — identical to CourseCard */}
-      <div style={{ padding:"15px 16px 17px", display:"flex", flexDirection:"column", gap:9, position:"relative", zIndex:2 }}>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <span style={{ fontSize:".62rem", fontWeight:800, letterSpacing:".08em", textTransform:"uppercase", color:accent }}>{category}</span>
-          <span style={{ fontSize:".68rem", color:T.text3 }}>{duration}</span>
+      {/* Body */}
+      <div style={{ padding:"15px 16px 17px",display:"flex",flexDirection:"column",gap:9,position:"relative",zIndex:2 }}>
+        {/* Category + badges */}
+        <div style={{ display:"flex",justifyContent:"space-between",alignItems:"center" }}>
+          <span style={{ fontSize:".62rem",fontWeight:800,letterSpacing:".08em",textTransform:"uppercase",color:accent }}>{category}</span>
+          <div style={{ display:"flex",gap:5,alignItems:"center" }}>
+            <span style={{ padding:"2px 7px",borderRadius:5,background:"rgba(0,0,0,.35)",fontSize:".62rem",color:"#8899b8",border:"1px solid rgba(255,255,255,.08)" }}>{level}</span>
+            <span style={{ fontSize:".68rem",color:"#3a4f6e" }}>— · {lessons||"—"} lessons</span>
+          </div>
         </div>
-        <div className="ff" style={{ fontSize:".93rem", fontWeight:800, letterSpacing:"-.03em", lineHeight:1.3,
-          display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
-          {title}
-        </div>
-        <div style={{ fontSize:".76rem", color:T.text2 }}>{instructor}</div>
-        <div style={{ display:"flex", alignItems:"center", gap:7 }}>
-          <span style={{ fontSize:".8rem", fontWeight:800, color:T.gold }}>{rating}</span>
-          <Stars r={rating} />
-          <span style={{ fontSize:".7rem", color:T.text3 }}>({reviews.toLocaleString()})</span>
-          <span style={{ marginLeft:"auto", fontSize:".68rem", color:T.text3 }}>{(students/1000).toFixed(0)}k</span>
-        </div>
-        <div style={{ display:"flex", gap:5, flexWrap:"wrap" }}>
-          {tags.slice(0,3).map(function(t) { return <span key={t} className="tag">{t}</span>; })}
-        </div>
-        <div style={{ height:1, background:T.bord, margin:"2px 0" }} />
 
-        {/* Progress row — ring + label + bar */}
-        <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-          <ProgressRing pct={pct} size={46} stroke={4}
-            color={pct === 100 ? T.green : accent} />
-          <div style={{ flex:1, minWidth:0 }}>
-            <div style={{ fontSize:".75rem", color:T.t1, fontWeight:600, marginBottom:6 }}>
-              {pct === 100 ? "Course completed!" : pct > 0 ? "Keep going!" : "Start learning"}
+        {/* Title */}
+        <div className="ff" style={{ fontSize:".93rem",fontWeight:800,letterSpacing:"-.03em",lineHeight:1.3,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden" }}>{title}</div>
+
+        {/* Instructor with avatar */}
+        <div style={{ display:"flex",alignItems:"center",gap:9 }}>
+          <div style={{ width:30,height:30,borderRadius:9,background:"linear-gradient(135deg,"+accent+"33,"+accent+"55)",border:"1px solid "+accent+"44",display:"grid",placeItems:"center",fontSize:".65rem",fontWeight:900,color:accent,flexShrink:0 }}>{initials}</div>
+          <div>
+            <div style={{ fontSize:".78rem",fontWeight:600,color:"#f0f6ff" }}>{instructorName}</div>
+            <div style={{ fontSize:".68rem",color:"#3a4f6e" }}>{category} · Expert Instructor</div>
+          </div>
+        </div>
+
+        {/* Rating */}
+        <div style={{ display:"flex",alignItems:"center",gap:7 }}>
+          <span style={{ fontSize:".8rem",fontWeight:800,color:T.gold }}>{rating}</span>
+          <Stars r={rating}/>
+          <span style={{ fontSize:".7rem",color:T.text3 }}>({reviews.toLocaleString()})</span>
+          <span style={{ marginLeft:"auto",fontSize:".68rem",color:T.text3 }}>{(students/1000).toFixed(0)}k</span>
+        </div>
+
+        {/* Tags */}
+        <div style={{ display:"flex",gap:5,flexWrap:"wrap" }}>
+          {tags.slice(0,3).map(function(t){return <span key={t} className="tag">{t}</span>;})}
+          {tags.length>3&&<span className="tag" style={{ color:T.text3 }}>+{tags.length-3}</span>}
+        </div>
+
+        <div style={{ height:1,background:T.bord,margin:"2px 0" }}/>
+
+        {/* Progress ring + bar */}
+        <div style={{ display:"flex",alignItems:"center",gap:12 }}>
+          <ProgressRing pct={pct} size={46} stroke={4} color={pct===100?T.green:accent}/>
+          <div style={{ flex:1,minWidth:0 }}>
+            <div style={{ fontSize:".75rem",color:T.t1,fontWeight:600,marginBottom:6 }}>
+              {pct===100?"Course completed!":pct>0?"Keep going!":"Start learning"}
             </div>
-            <div style={{ height:4, background:"rgba(255,255,255,.07)", borderRadius:10, overflow:"hidden" }}>
-              <div style={{ height:"100%", width:pct + "%",
-                background: pct === 100
-                  ? "linear-gradient(90deg," + T.green + "," + T.teal + ")"
-                  : "linear-gradient(90deg," + accent + "," + accent + "88)",
-                borderRadius:10, transition:"width .6s ease" }} />
+            <div style={{ height:4,background:"rgba(255,255,255,.07)",borderRadius:10,overflow:"hidden" }}>
+              <div style={{ height:"100%",width:pct+"%",background:pct===100?"linear-gradient(90deg,"+T.green+","+T.teal+")":"linear-gradient(90deg,"+accent+","+accent+"88)",borderRadius:10,transition:"width .6s ease" }}/>
             </div>
           </div>
         </div>
 
-        {/* Full-width CTA button */}
-        <button
-          onClick={function(e) { e.stopPropagation(); navigate("/learn/" + courseId); }}
-          style={{
-            width:"100%", padding:"12px 0", borderRadius:50, border:"none", cursor:"pointer",
-            background: pct === 100
-              ? "linear-gradient(135deg,#22C55E,#0EB5AA)"
-              : "linear-gradient(135deg,#0EB5AA,#38BDF8)",
-            color:"#030810", fontSize:".84rem", fontWeight:800,
-            letterSpacing:".01em", transition:"background .25s, transform .18s, box-shadow .18s",
-          }}
-          onMouseEnter={function(e) {
-            e.currentTarget.style.background = pct === 100
-              ? "linear-gradient(135deg,#16A34A,#0891B2)"
-              : "linear-gradient(135deg,#38BDF8,#6366F1)";
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = pct === 100
-              ? "0 8px 24px rgba(34,197,94,.35)"
-              : "0 8px 24px rgba(14,181,170,.35)";
-          }}
-          onMouseLeave={function(e) {
-            e.currentTarget.style.background = pct === 100
-              ? "linear-gradient(135deg,#22C55E,#0EB5AA)"
-              : "linear-gradient(135deg,#0EB5AA,#38BDF8)";
-            e.currentTarget.style.transform = "none";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-        >
-          {pct === 100 ? "🏅 View Certificate" : pct > 0 ? "▶ Continue Course" : "▶ Start Course"}
+        {/* CTA button */}
+        <button onClick={function(e){e.stopPropagation();navigate("/learn/"+courseId);}}
+          style={{ width:"100%",padding:"12px 0",borderRadius:50,border:"none",cursor:"pointer",
+            background:pct===100?"linear-gradient(135deg,#22C55E,#0EB5AA)":"linear-gradient(135deg,#0EB5AA,#38BDF8)",
+            color:"#030810",fontSize:".84rem",fontWeight:800,letterSpacing:".01em",transition:"all .18s" }}
+          onMouseEnter={function(e){e.currentTarget.style.transform="translateY(-2px)";e.currentTarget.style.boxShadow="0 8px 24px rgba(14,181,170,.35)";}}
+          onMouseLeave={function(e){e.currentTarget.style.transform="none";e.currentTarget.style.boxShadow="none";}}>
+          {pct===100?"🏅 View Certificate":pct>0?"▶ Continue Course":"▶ Start Course"}
         </button>
       </div>
     </div>
@@ -228,6 +194,7 @@ export default function MyCourses() {
   var [enrollments, setEnrollments] = useState([]);
   var [loading, setLoading]         = useState(true);
   var [filter, setFilter]           = useState("all");
+  var [search, setSearch]           = useState("");
 
   var bgRef      = useRef(null);
   var headerRef  = useRef(null);
@@ -254,6 +221,9 @@ export default function MyCourses() {
 
   var filtered = enrollments.filter(function(e) {
     var p = e.progress || 0;
+    var title = (e.course?.title || "").toLowerCase();
+    var instructor = (typeof e.course?.instructor === "object" ? e.course?.instructor?.name : e.course?.instructor || "").toLowerCase();
+    if (search && !title.includes(search.toLowerCase()) && !instructor.includes(search.toLowerCase())) return false;
     if (filter === "completed")   return p === 100;
     if (filter === "in-progress") return p > 0 && p < 100;
     return true;
@@ -291,7 +261,18 @@ export default function MyCourses() {
           title={<>My <em style={{ fontStyle:"italic", color:T.gold }}>Courses</em></>}
           collapsed={collapsed}
           setCollapsed={setCollapsed}
-        />
+        >
+          <div style={{ display:"flex", alignItems:"center", gap:8, background:"rgba(255,255,255,.04)", border:"1px solid rgba(255,255,255,.08)", borderRadius:10, padding:"7px 14px", minWidth:240 }}>
+            <span style={{ color:"rgba(255,255,255,.3)", fontSize:".85rem" }}>🔍</span>
+            <input
+              value={search}
+              onChange={function(e) { setSearch(e.target.value); }}
+              placeholder="Search courses…"
+              style={{ background:"none", border:"none", outline:"none", color:"#f0f6ff", fontFamily:"Satoshi,sans-serif", fontSize:".82rem", flex:1, minWidth:0 }}
+            />
+            {search && <span onClick={function(){setSearch("");}} style={{ cursor:"pointer", color:"rgba(255,255,255,.3)", fontSize:".75rem" }}>✕</span>}
+          </div>
+        </TopBar>
 
         <div style={{ flex:1, overflowY:"auto", padding:"28px 28px 60px", scrollbarWidth:"none" }}>
 
@@ -334,7 +315,7 @@ export default function MyCourses() {
 
           {/* Course grid */}
           {loading ? (
-            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(290px,1fr))", gap:18 }}>
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))", gap:18 }}>
               {[0,1,2,3,4,5].map(function(i) {
                 return <div key={i} style={{ height:360, borderRadius:18, background:T.s1,
                   animation:"pulse 1.5s ease-in-out infinite", opacity:.5 }} />;
@@ -343,7 +324,7 @@ export default function MyCourses() {
           ) : filtered.length === 0 ? (
             <EmptyState filter={filter} />
           ) : (
-            <div ref={gridRef} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(290px,1fr))", gap:18 }}>
+            <div ref={gridRef} style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(340px,1fr))", gap:18 }}>
               {filtered.map(function(e, i) {
                 return <MyCoursesCard key={e._id || i} enrollment={e} idx={i} />;
               })}

@@ -13,54 +13,123 @@ import PathModal from "./components/PathModal";
 import { Stars, SectionLabel, ANum } from "./components/UIElements";
 import "./Explore.css";
 
-function ExploreCard({ course: c, idx, onOpen, enrolledIds }) {
+function ExploreCard({ course: c, idx, onOpen, enrolledIds, enrollmentMap = {} }) {
   const navigate = useNavigate();
   const enrolled = enrolledIds.has(String(c.id));
   const disc = c.originalPrice > c.price ? Math.round((1 - c.price / c.originalPrice) * 100) : 0;
+  const pct = enrolled ? (enrollmentMap[String(c.id)] || 0) : 0;
+  const instructorName = typeof c.instructor === "object" ? (c.instructor?.name || "Instructor") : (c.instructor || "Instructor");
+  const initials = instructorName.split(" ").map(n => n[0]).join("").slice(0,2).toUpperCase();
+  const accent = c.accent || "#7c2fff";
+
   return (
     <div onClick={() => onOpen(c)} style={{ background:"rgba(8,12,28,.97)", border:"1px solid rgba(255,255,255,.06)", borderRadius:18, overflow:"hidden", cursor:"pointer", transition:"all .3s", animationDelay:`${idx*.06}s`, animation:"fadeUp .5s ease both" }}
-      onMouseOver={e => { e.currentTarget.style.transform="translateY(-5px)"; e.currentTarget.style.borderColor="rgba(124,47,255,.25)"; }}
-      onMouseOut={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.borderColor="rgba(255,255,255,.06)"; }}>
-      {/* Thumb */}
-      <div style={{ height:155, background:c.gradient||"linear-gradient(135deg,#0a1830,#130840)", position:"relative", overflow:"hidden" }}>
+      onMouseOver={e => { e.currentTarget.style.transform="translateY(-5px)"; e.currentTarget.style.borderColor="rgba(124,47,255,.25)"; e.currentTarget.style.boxShadow="0 18px 45px rgba(0,0,0,.5)"; }}
+      onMouseOut={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.borderColor="rgba(255,255,255,.06)"; e.currentTarget.style.boxShadow="none"; }}>
+
+      {/* Thumbnail */}
+      <div style={{ height:168, background:c.gradient||"linear-gradient(135deg,#0a1830,#130840)", position:"relative", overflow:"hidden" }}>
         {c.thumbnail
-          ? <img src={c.thumbnail} alt={c.title} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }}/>
-          : <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}><span style={{ fontSize:"3rem", opacity:.15 }}>{c.icon||"📘"}</span></div>
+          ? <img src={c.thumbnail} alt={c.title} style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", zIndex:0 }}/>
+          : <>
+              <div style={{ position:"absolute", inset:0, background:`radial-gradient(ellipse 65% 80% at 30% 40%,${accent}28,transparent)` }}/>
+              <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center" }}>
+                <span style={{ fontSize:"3.2rem", opacity:.16, filter:"blur(1px)" }}>{c.icon||"📘"}</span>
+              </div>
+              <div style={{ position:"absolute", top:"50%", left:"50%", transform:"translate(-50%,-55%)", width:58, height:58, borderRadius:15, background:`linear-gradient(135deg,${accent}1a,${accent}36)`, border:`1.5px solid ${accent}44`, display:"grid", placeItems:"center", backdropFilter:"blur(8px)", zIndex:2 }}>
+                <span style={{ fontSize:"1.7rem" }}>{c.icon||"📘"}</span>
+              </div>
+            </>
         }
-        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.7))" }}/>
-        <div style={{ position:"absolute", top:10, left:10, display:"flex", gap:5 }}>
-          <span style={{ padding:"2px 8px", borderRadius:5, background:"rgba(124,47,255,.2)", border:"1px solid rgba(124,47,255,.35)", fontSize:".6rem", fontWeight:800, color:"#9d7fff" }}>{c.badge||"New"}</span>
-        </div>
-        <div style={{ position:"absolute", top:10, right:10, padding:"2px 7px", borderRadius:5, background:"rgba(0,0,0,.55)", fontSize:".62rem", color:"#8899b8", border:"1px solid rgba(255,255,255,.08)" }}>{c.level}</div>
-      </div>
-      {/* Body */}
-      <div style={{ padding:"14px 16px 16px", display:"flex", flexDirection:"column", gap:8 }}>
-        <div style={{ display:"flex", justifyContent:"space-between" }}>
-          <span style={{ fontSize:".6rem", fontWeight:800, letterSpacing:".08em", textTransform:"uppercase", color:c.accent||"#7c2fff" }}>{c.category}</span>
-          <span style={{ fontSize:".68rem", color:"#3a4f6e" }}>{c.duration} · {c.lessons||0} lessons</span>
-        </div>
-        <div style={{ fontFamily:"'Fraunces',serif", fontSize:".92rem", fontWeight:900, letterSpacing:"-.03em", lineHeight:1.3, color:"#f0f6ff", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{c.title}</div>
-        <div style={{ fontSize:".76rem", color:"#8899b8" }}>{c.instructor}</div>
-        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
-          <span style={{ fontSize:".78rem", fontWeight:800, color:"#f0a500" }}>{c.rating||0}</span>
-          <span style={{ fontSize:".68rem", color:"#3a4f6e" }}>({c.reviews||0})</span>
-          <span style={{ marginLeft:"auto", fontSize:".68rem", color:"#3a4f6e" }}>{((c.students||0)/1000).toFixed(0)}k</span>
-        </div>
-        <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
-          {(c.tags||[]).slice(0,3).map((t,i) => { const tag = typeof t === "object" ? (t.name||t.label||JSON.stringify(t)) : String(t); return <span key={i} style={{ padding:"2px 7px", borderRadius:5, fontSize:".62rem", background:"rgba(255,255,255,.05)", color:"#8899b8", border:"1px solid rgba(255,255,255,.06)" }}>{tag}</span>; })}
-        </div>
-        <div style={{ height:1, background:"rgba(255,255,255,.06)", margin:"2px 0" }}/>
-        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <div>
-            <span style={{ fontFamily:"'Fraunces',serif", fontSize:"1rem", fontWeight:900, color:"#f0a500" }}>{c.price===0?"FREE":`₹${c.price.toLocaleString()}`}</span>
-            {disc > 0 && <span style={{ fontSize:".68rem", color:"#3a4f6e", textDecoration:"line-through", marginLeft:6 }}>₹{c.originalPrice.toLocaleString()}</span>}
-            {disc > 0 && <span style={{ fontSize:".62rem", fontWeight:800, color:"#4ade80", background:"rgba(74,222,128,.1)", padding:"1px 5px", borderRadius:4, marginLeft:4 }}>{disc}%</span>}
+        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to bottom,transparent 35%,rgba(0,0,0,.7))", zIndex:1 }}/>
+        {/* Progress bar overlay for enrolled */}
+        {enrolled && (
+          <div style={{ position:"absolute", bottom:0, left:0, right:0, zIndex:3 }}>
+            <div style={{ height:3, background:"rgba(0,0,0,.4)" }}>
+              <div style={{ height:"100%", width:`${pct}%`, background: pct===100 ? "linear-gradient(90deg,#22c55e,#00d4aa)" : "linear-gradient(90deg,#f0a500,#ff9d45)", transition:"width 1.5s ease" }}/>
+            </div>
           </div>
-          <button onClick={e => { e.stopPropagation(); if(enrolled) navigate(`/learn/${c.id}`); else navigate(`/enroll/${c.id}`); }}
-            style={{ padding:"7px 14px", borderRadius:9, border:"none", background:enrolled?"linear-gradient(135deg,#7c2fff,#8b5cf6)":"linear-gradient(135deg,#00d4aa,#3b82f6)", color:"#030810", fontSize:".74rem", fontWeight:800, cursor:"pointer" }}>
-            {enrolled ? "▶ Continue" : "Enroll Now"}
-          </button>
+        )}
+      </div>
+
+      {/* Body */}
+      <div style={{ padding:"15px 16px 17px", display:"flex", flexDirection:"column", gap:9 }}>
+        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+          <span style={{ fontSize:".62rem", fontWeight:800, letterSpacing:".08em", textTransform:"uppercase", color:accent }}>{c.category}</span>
+          <div style={{ display:"flex", gap:5, alignItems:"center" }}>
+            {enrolled && <span style={{ padding:"2px 8px", borderRadius:5, background:"rgba(0,212,170,.15)", border:"1px solid rgba(0,212,170,.3)", fontSize:".6rem", fontWeight:800, color:"#00d4aa" }}>ENROLLED</span>}
+            <span style={{ padding:"2px 7px", borderRadius:5, background:"rgba(0,0,0,.35)", fontSize:".62rem", color:"#8899b8", border:"1px solid rgba(255,255,255,.08)" }}>{c.level}</span>
+            <span style={{ fontSize:".68rem", color:"#3a4f6e" }}>— · {c.lessons||0} lessons</span>
+          </div>
         </div>
+
+        <div style={{ fontFamily:"'Fraunces',serif", fontSize:".93rem", fontWeight:900, letterSpacing:"-.03em", lineHeight:1.3, color:"#f0f6ff", display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>{c.title}</div>
+
+        {/* Instructor with avatar */}
+        <div style={{ display:"flex", alignItems:"center", gap:9 }}>
+          <div style={{ width:30, height:30, borderRadius:9, background:`linear-gradient(135deg,${accent}33,${accent}55)`, border:`1px solid ${accent}44`, display:"grid", placeItems:"center", fontSize:".65rem", fontWeight:900, color:accent, flexShrink:0 }}>{initials}</div>
+          <div>
+            <div style={{ fontSize:".78rem", fontWeight:600, color:"#f0f6ff" }}>{instructorName}</div>
+            <div style={{ fontSize:".68rem", color:"#3a4f6e" }}>{c.category} · Expert Instructor</div>
+          </div>
+        </div>
+
+        {/* Rating */}
+        <div style={{ display:"flex", alignItems:"center", gap:6 }}>
+          <span style={{ fontSize:".8rem", fontWeight:800, color:"#f0a500" }}>{c.rating||0}</span>
+          <span style={{ display:"flex", gap:2 }}>
+            {[1,2,3,4,5].map(i => <span key={i} style={{ fontSize:".65rem", color: i <= Math.round(c.rating||0) ? "#f0a500" : "#3a4f6e" }}>★</span>)}
+          </span>
+          <span style={{ fontSize:".7rem", color:"#3a4f6e" }}>({(c.reviews||0).toLocaleString()})</span>
+          <span style={{ marginLeft:"auto", fontSize:".68rem", color:"#3a4f6e" }}>{((c.students||0)/1000).toFixed(0)}k students</span>
+        </div>
+
+        {/* Tags */}
+        <div style={{ display:"flex", gap:4, flexWrap:"wrap" }}>
+          {(c.tags||[]).slice(0,3).map((t,i) => { const tag = typeof t === "object" ? (t.name||t.label||"") : String(t); return <span key={i} style={{ padding:"3px 8px", borderRadius:6, fontSize:".62rem", background:"rgba(255,255,255,.05)", color:"#8899b8", border:"1px solid rgba(255,255,255,.06)" }}>{tag}</span>; })}
+          {(c.tags||[]).length > 3 && <span style={{ padding:"3px 8px", borderRadius:6, fontSize:".62rem", background:"rgba(255,255,255,.05)", color:"#3a4f6e", border:"1px solid rgba(255,255,255,.06)" }}>+{c.tags.length-3}</span>}
+        </div>
+
+        <div style={{ height:1, background:"rgba(255,255,255,.06)", margin:"2px 0" }}/>
+
+        {/* Progress + CTA */}
+        {enrolled ? (
+          <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+            {/* Progress ring */}
+            <div style={{ position:"relative", width:46, height:46, flexShrink:0 }}>
+              <svg width="46" height="46" style={{ transform:"rotate(-90deg)" }}>
+                <circle cx="23" cy="23" r="18" fill="none" stroke="rgba(255,255,255,.07)" strokeWidth="4"/>
+                <circle cx="23" cy="23" r="18" fill="none" stroke={pct===100?"#22c55e":accent} strokeWidth="4"
+                  strokeDasharray={`${2*Math.PI*18}`} strokeDashoffset={`${2*Math.PI*18*(1-pct/100)}`}
+                  strokeLinecap="round" style={{ transition:"stroke-dashoffset .6s ease" }}/>
+              </svg>
+              <div style={{ position:"absolute", inset:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:".58rem", fontWeight:900, color: pct===100?"#22c55e":accent }}>{pct}%</div>
+            </div>
+            <div style={{ flex:1, minWidth:0 }}>
+              <div style={{ fontSize:".75rem", color:"#f0f6ff", fontWeight:600, marginBottom:6 }}>
+                {pct===100 ? "Course completed!" : pct>0 ? "Keep going!" : "Start learning"}
+              </div>
+              <div style={{ height:4, background:"rgba(255,255,255,.07)", borderRadius:10, overflow:"hidden" }}>
+                <div style={{ height:"100%", width:`${pct}%`, background: pct===100 ? "linear-gradient(90deg,#22c55e,#00d4aa)" : `linear-gradient(90deg,${accent},${accent}88)`, borderRadius:10, transition:"width .6s ease" }}/>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div style={{ display:"flex", alignItems:"baseline", gap:6 }}>
+            <span style={{ fontFamily:"'Fraunces',serif", fontSize:"1.1rem", fontWeight:900, color:"#f0a500" }}>{c.price===0?"FREE":`₹${c.price.toLocaleString()}`}</span>
+            {disc > 0 && <><span style={{ fontSize:".75rem", color:"#3a4f6e", textDecoration:"line-through" }}>₹{c.originalPrice.toLocaleString()}</span><span style={{ fontSize:".68rem", fontWeight:800, color:"#4ade80", background:"rgba(74,222,128,.1)", padding:"1px 6px", borderRadius:4 }}>{disc}% off</span></>}
+          </div>
+        )}
+
+        {/* Full-width CTA button */}
+        <button onClick={e => { e.stopPropagation(); if(enrolled) navigate(`/learn/${c.id}`); else navigate(`/enroll/${c.id}`); }}
+          style={{ width:"100%", padding:"12px 0", borderRadius:50, border:"none", cursor:"pointer",
+            background: pct===100 ? "linear-gradient(135deg,#22C55E,#0EB5AA)" : enrolled ? "linear-gradient(135deg,#0EB5AA,#38BDF8)" : "linear-gradient(135deg,#00d4aa,#3b82f6)",
+            color:"#030810", fontSize:".84rem", fontWeight:800, letterSpacing:".01em", transition:"all .18s" }}
+          onMouseEnter={e => { e.currentTarget.style.transform="translateY(-2px)"; e.currentTarget.style.boxShadow="0 8px 24px rgba(14,181,170,.35)"; }}
+          onMouseLeave={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="none"; }}>
+          {pct===100 ? "🏅 View Certificate" : enrolled ? "▶ Continue Course" : "Enroll Now"}
+        </button>
       </div>
     </div>
   );
@@ -89,6 +158,9 @@ export default function ExplorePage() {
   const [sortOpen, setSortOpen] = useState(false);
   const [COURSES, setCourses] = useState([]);
   const [enrolledIds, setEnrolledIds] = useState(new Set());
+  const [enrollmentMap, setEnrollmentMap] = useState({});
+  const [showEnrolled, setShowEnrolled] = useState("all");
+  const [level, setLevel] = useState("All Levels");
 
   // Fetch enrolled course IDs for current user
   useEffect(() => {
@@ -96,8 +168,12 @@ export default function ExplorePage() {
     if (!token) return;
     enrollmentAPI.getMyEnrollments()
       .then(res => {
-        const ids = new Set((res.data?.data || []).map(e => String(e.course?._id || e.courseId)));
+        const data = res.data?.data || [];
+        const ids = new Set(data.map(e => String(e.course?._id || e.courseId)));
+        const map = {};
+        data.forEach(e => { map[String(e.course?._id || e.courseId)] = e.progress || 0; });
         setEnrolledIds(ids);
+        setEnrollmentMap(map);
       })
       .catch(() => {});
   }, []);
@@ -151,10 +227,14 @@ export default function ExplorePage() {
   const SORT_OPTS = ["Most Popular", "Highest Rated", "Newest", "Price: Low to High"];
 
   const filteredCourses = COURSES.filter(c => {
+    const isEnrolled = enrolledIds.has(String(c.id));
     if (search && !c.title.toLowerCase().includes(search.toLowerCase()) &&
         !c.instructor.toLowerCase().includes(search.toLowerCase()) &&
         !c.category.toLowerCase().includes(search.toLowerCase())) return false;
     if (activeCat !== "All" && c.category !== activeCat) return false;
+    if (level !== "All Levels" && c.level !== level) return false;
+    if (showEnrolled === "enrolled" && !isEnrolled) return false;
+    if (showEnrolled === "explore" && isEnrolled) return false;
     return true;
   }).sort((a, b) => {
     if (sort === "Highest Rated") return b.rating - a.rating;
@@ -360,60 +440,60 @@ export default function ExplorePage() {
                 </div>
               </div>
 
-              {/* Filters */}
-              <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 16, flexWrap: "wrap" }}>
-                <div style={{ display: "flex", gap: 5, flexWrap: "wrap", flex: 1 }}>
-                  {["All", "Web Dev", "AI / ML", "Cloud", "Design", "DSA", "DevOps", "Data Science", "Mobile Dev"].map(c => (
-                    <button key={c} className={`f-pill${activeCat === c ? " on" : ""}`} onClick={() => setActiveCat(c)}>{c}</button>
+              {/* Filters — Row 1: Enrolled toggle + Categories */}
+              <div style={{ display:"flex", gap:10, alignItems:"center", flexWrap:"wrap", marginBottom:10 }}>
+                {/* Enrolled filter */}
+                <div style={{ display:"flex", gap:5, background:"rgba(255,255,255,.04)", padding:"5px", borderRadius:11, border:"1px solid rgba(255,255,255,.07)" }}>
+                  {[{v:"all",l:"All Courses"},{v:"enrolled",l:"My Enrolled"},{v:"explore",l:"Explore New"}].map(({v,l}) => (
+                    <button key={v} onClick={() => setShowEnrolled(v)}
+                      style={{ padding:"5px 14px", borderRadius:8, cursor:"pointer", transition:"all .18s", border:"none", fontFamily:"Satoshi,sans-serif", fontSize:".78rem", fontWeight: showEnrolled===v ? 700 : 500,
+                        background: showEnrolled===v ? "rgba(240,165,0,.15)" : "transparent",
+                        color: showEnrolled===v ? T.gold : T.text2 }}>
+                      {l}
+                    </button>
+                  ))}
+                </div>
+
+                <div style={{ width:1, height:28, background:"rgba(255,255,255,.07)" }}/>
+
+                {/* Category pills */}
+                <div style={{ display:"flex", gap:5, flexWrap:"wrap", flex:1 }}>
+                  {["All","Web Dev","AI / ML","Cloud","Design","DSA","DevOps","Data Science","Mobile Dev"].map(c => (
+                    <button key={c} className={`f-pill${activeCat===c?" on":""}`} onClick={() => setActiveCat(c)}>{c}</button>
                   ))}
                 </div>
 
                 {/* Sort */}
-                <div style={{ position: "relative", flexShrink: 0 }}>
-                  <button className="btn-outline" style={{ display: "flex", alignItems: "center", gap: 6, fontSize: ".77rem" }} onClick={() => setSortOpen(s => !s)}>
-                    {sort} <span style={{ fontSize: ".6rem", opacity: .6 }}>▼</span>
+                <div style={{ position:"relative", flexShrink:0 }}>
+                  <button className="btn-outline" style={{ display:"flex", alignItems:"center", gap:6, fontSize:".77rem" }} onClick={() => setSortOpen(s => !s)}>
+                    {sort} <span style={{ fontSize:".6rem", opacity:.6 }}>▼</span>
                   </button>
                   {sortOpen && (
-                    <div style={{
-                      position: "absolute",
-                      top: "calc(100% + 6px)",
-                      right: 0,
-                      background: "#0b1628",
-                      border: `1px solid rgba(255,255,255,.08)`,
-                      borderRadius: 12,
-                      padding: 5,
-                      minWidth: 190,
-                      zIndex: 100,
-                      animation: "popIn .2s cubic-bezier(.34,1.56,.64,1) both",
-                      boxShadow: "0 18px 45px rgba(0,0,0,.6)"
-                    }}>
+                    <div style={{ position:"absolute", top:"calc(100% + 6px)", right:0, background:"#0b1628", border:"1px solid rgba(255,255,255,.08)", borderRadius:12, padding:5, minWidth:190, zIndex:100, animation:"popIn .2s cubic-bezier(.34,1.56,.64,1) both", boxShadow:"0 18px 45px rgba(0,0,0,.6)" }}>
                       {SORT_OPTS.map(o => (
-                        <div
-                          key={o}
-                          style={{
-                            padding: "8px 12px",
-                            borderRadius: 8,
-                            fontSize: ".78rem",
-                            cursor: "pointer",
-                            color: sort === o ? T.gold : T.text2,
-                            fontWeight: sort === o ? 700 : 400,
-                            transition: "all .18s",
-                            background: "transparent"
-                          }}
+                        <div key={o} style={{ padding:"8px 12px", borderRadius:8, fontSize:".78rem", cursor:"pointer", color:sort===o?T.gold:T.text2, fontWeight:sort===o?700:400, transition:"all .18s" }}
                           onClick={() => { setSort(o); setSortOpen(false); }}
-                          onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.05)"}
-                          onMouseLeave={e => e.currentTarget.style.background = "transparent"}
-                        >
-                          {sort === o && "✓ "}{o}
+                          onMouseEnter={e => e.currentTarget.style.background="rgba(255,255,255,.05)"}
+                          onMouseLeave={e => e.currentTarget.style.background="transparent"}>
+                          {sort===o&&"✓ "}{o}
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
+              </div>
 
-                <div style={{ fontSize: ".76rem", color: T.text3, flexShrink: 0 }}>
-                  {filteredCourses.length} course{filteredCourses.length !== 1 ? "s" : ""}
+              {/* Filters — Row 2: Level + count */}
+              <div style={{ display:"flex", gap:8, alignItems:"center", marginBottom:16 }}>
+                <div style={{ display:"flex", gap:5 }}>
+                  {["All Levels","Beginner","Intermediate","Advanced"].map(l => (
+                    <button key={l} className={`f-pill${level===l?" on":""}`}
+                      style={{ padding:"5px 12px", fontSize:".74rem" }}
+                      onClick={() => setLevel(l)}>{l}</button>
+                  ))}
                 </div>
+                <div style={{ flex:1 }}/>
+                <div style={{ fontSize:".76rem", color:T.text3 }}>{filteredCourses.length} course{filteredCourses.length!==1?"s":""}</div>
               </div>
 
               {filteredCourses.length === 0 ? (
@@ -424,8 +504,8 @@ export default function ExplorePage() {
                   <button className="btn-outline" onClick={() => { setSearch(""); setActiveCat("All"); }}>Clear filters</button>
                 </div>
               ) : (
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(290px,1fr))", gap: 18 }}>
-                  {filteredCourses.map((c, i) => <ExploreCard key={c.id} course={c} idx={i} onOpen={setModal} enrolledIds={enrolledIds} />)}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 18 }}>
+                  {filteredCourses.map((c, i) => <ExploreCard key={c.id} course={c} idx={i} onOpen={setModal} enrolledIds={enrolledIds} enrollmentMap={enrollmentMap} />)}
                 </div>
               )}
             </div>

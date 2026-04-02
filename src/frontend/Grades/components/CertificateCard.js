@@ -78,7 +78,7 @@ function CertPreview({ c }) {
         maxWidth: "85%", zIndex: 1,
         display: "-webkit-box", WebkitLineClamp: 2,
         WebkitBoxOrient: "vertical", overflow: "hidden",
-      }}>{c.title}</div>
+      }}>{c.courseName || c.title}</div>
 
       {/* Score badge */}
       <div style={{
@@ -121,7 +121,7 @@ export default function CertificateCard({ c, idx, onPreview, onDownload }) {
       </div>
 
       <div className="cert-body">
-        <div className="cert-name">{c.title}</div>
+        <div className="cert-name">{c.courseName || c.title}</div>
         <div className="cert-meta">
           <span>🏆 Grade: <b style={{ color: "#f5a020" }}>{c.grade}</b></span>
           <span>📅 {c.issued}</span>
