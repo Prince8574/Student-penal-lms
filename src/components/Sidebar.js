@@ -67,14 +67,20 @@ const RED_IDS = ["assign", "notif"];
 export default function Sidebar({ collapsed, setCollapsed }) {
   const navigate  = useNavigate();
   const location  = useLocation();
-  const { user }  = useAuth();
+  const { user, logout }  = useAuth();
 
   const userName     = user?.name || "Student";
+  const userEmail    = user?.email || "";
   const userInitials = userName.split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase();
+  const avatarUrl    = user?.avatar || null;
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/auth', { replace: true });
+  };
 
   // Derive active from current route
   const activeId = getActiveId(location.pathname);
-
   const w = collapsed ? 68 : 242;
 
   return (
@@ -153,23 +159,44 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         ))}
       </div>
 
-      {/* Collapse toggle */}
+      {/* Profile + Logout */}
       <div style={{
-        padding: collapsed ? "12px 8px" : "12px 14px",
+        padding: collapsed ? "10px 8px" : "10px 12px",
         borderTop: `1px solid ${T.bord}`,
-        display: "flex", justifyContent: collapsed ? "center" : "flex-end",
+        display: "flex", alignItems: "center", gap: 9,
         flexShrink: 0,
       }}>
-        <button onClick={() => setCollapsed?.(!collapsed)} style={{
-          width: 28, height: 28, borderRadius: 7,
-          border: `1px solid ${T.bord}`, background: "transparent",
-          color: T.text3, cursor: "pointer", fontSize: ".75rem",
-          display: "grid", placeItems: "center", transition: "all .18s",
-        }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(240,165,0,.3)"; e.currentTarget.style.color = T.gold; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = T.bord; e.currentTarget.style.color = T.text3; }}
-        >{collapsed ? "→" : "←"}</button>
+        {/* Avatar */}
+        <div onClick={() => navigate('/profile')} style={{
+          width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+          background: avatarUrl ? 'transparent' : G.gold,
+          display: "grid", placeItems: "center", cursor: "pointer",
+          overflow: "hidden", boxShadow: "0 0 10px rgba(240,165,0,.2)",
+        }}>
+          {avatarUrl
+            ? <img src={avatarUrl} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            : <span style={{ fontSize: ".75rem", fontWeight: 800, color: "#fff" }}>{userInitials}</span>
+          }
+        </div>
+
+        {!collapsed && (
+          <div style={{ flex: 1, minWidth: 0, cursor: "pointer" }} onClick={() => navigate('/profile')}>
+            <div style={{ fontSize: ".8rem", fontWeight: 600, color: T.text, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{userName}</div>
+            <div style={{ fontSize: ".58rem", color: T.text2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontFamily: "monospace" }}>{userEmail}</div>
+          </div>
+        )}
+
+        {!collapsed && (
+          <span
+            title="Logout"
+            onClick={handleLogout}
+            style={{ color: "#ff6b9d", cursor: "pointer", fontSize: "1rem", padding: "4px 6px", borderRadius: 6, transition: "background .2s", flexShrink: 0 }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,107,157,.1)"}
+            onMouseLeave={e => e.currentTarget.style.background = "transparent"}
+          >⏻</span>
+        )}
       </div>
+
     </aside>
   );
 }
