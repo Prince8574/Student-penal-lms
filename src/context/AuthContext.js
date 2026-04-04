@@ -25,12 +25,19 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       try {
         const response = await authAPI.getMe();
-        setUser(response.data.data);
-        setIsAuthenticated(true);
+        const userData = response.data.data;
+        setUser(userData);
+        setIsAuthenticated(userData?.status !== 'suspended');
       } catch (error) {
-        localStorage.removeItem('token');
-        setUser(null);
-        setIsAuthenticated(false);
+        // If 403 suspended, keep user data but mark not authenticated
+        if (error.response?.status === 403 && error.response?.data?.suspended) {
+          setUser({ suspended: true });
+          setIsAuthenticated(false);
+        } else {
+          localStorage.removeItem('token');
+          setUser(null);
+          setIsAuthenticated(false);
+        }
       }
     }
     setLoading(false);

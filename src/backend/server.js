@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const passport = require('passport');
 require('dotenv').config();
 
 const { connectDB, registerShutdownHooks, dbStatus } = require('./config/db');
@@ -24,9 +25,11 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+require('./routes/googleAuth'); // initialize passport strategy
 
 // Routes
 app.use('/api/auth',        require('./routes/auth'));
+app.use('/api/auth/google', require('./routes/googleAuth'));
 app.use('/api/users',       require('./routes/users'));
 app.use('/api/courses',     require('./routes/courses'));
 app.use('/api/enrollments', require('./routes/enrollments'));

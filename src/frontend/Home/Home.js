@@ -15,15 +15,18 @@ function Home() {
   const heroCanvasRef = useRef(null);
 
   useEffect(() => {
-    // Initialize bento card glow effect
-    initBentoCardGlow();
-    
-    // Initialize Three.js canvases
-    initBackgroundCanvas(bgCanvasRef.current);
-    initHeroCanvas(heroCanvasRef.current);
-    
-    // Initialize GSAP animations
-    initGSAPAnimations();
+    let rafId;
+    const init = () => {
+      initBentoCardGlow();
+      initBackgroundCanvas(bgCanvasRef.current);
+      // Hero canvas needs parent to be sized first
+      setTimeout(() => {
+        initHeroCanvas(heroCanvasRef.current);
+        setTimeout(() => initGSAPAnimations(), 150);
+      }, 50);
+    };
+    rafId = requestAnimationFrame(() => requestAnimationFrame(init));
+    return () => cancelAnimationFrame(rafId);
   }, []);
 
   return (

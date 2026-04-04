@@ -73,6 +73,7 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  googleId: { type: String, sparse: true },
   dob: {
     type: Date
   },

@@ -1,25 +1,7 @@
-// Cursor animation (disabled - using system cursor)
-// export const initCursor = (cursor, trail) => {
-//   document.addEventListener('mousemove', (e) => {
-//     if (cursor) {
-//       cursor.style.left = e.clientX + 'px';
-//       cursor.style.top = e.clientY + 'px';
-//     }
-//     if (trail) {
-//       trail.style.left = e.clientX + 'px';
-//       trail.style.top = e.clientY + 'px';
-//     }
-//   });
-
-//   // Bento card mouse glow
-//   document.querySelectorAll('.bento-card').forEach(card => {
-//     card.addEventListener('mousemove', (e) => {
-//       const r = card.getBoundingClientRect();
-//       card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
-//       card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
-//     });
-//   });
-// };
+import * as THREE from 'three';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+gsap.registerPlugin(ScrollTrigger);
 
 // Bento card mouse glow effect (keeping this for hover effects)
 export const initBentoCardGlow = () => {
@@ -34,20 +16,20 @@ export const initBentoCardGlow = () => {
 
 // Three.js background canvas
 export const initBackgroundCanvas = (canvas) => {
-  if (!canvas || !window.THREE) return;
+  if (!canvas) return;
   let renderer;
   try {
-    renderer = new window.THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
   } catch(e) { console.warn('[WebGL] Home bg skipped'); return; }
   renderer.setPixelRatio(1);
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  const scene = new window.THREE.Scene();
-  const camera = new window.THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 300);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 300);
   camera.position.z = 40;
 
   // Stars
-  const sg = new window.THREE.BufferGeometry();
+  const sg = new THREE.BufferGeometry();
   const N = 700;
   const sp = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
@@ -55,8 +37,8 @@ export const initBackgroundCanvas = (canvas) => {
     sp[i * 3 + 1] = (Math.random() - 0.5) * 160;
     sp[i * 3 + 2] = (Math.random() - 0.5) * 80;
   }
-  sg.setAttribute('position', new window.THREE.BufferAttribute(sp, 3));
-  scene.add(new window.THREE.Points(sg, new window.THREE.PointsMaterial({
+  sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+  scene.add(new THREE.Points(sg, new THREE.PointsMaterial({
     color: 0xffffff,
     size: 0.09,
     transparent: true,
@@ -64,28 +46,28 @@ export const initBackgroundCanvas = (canvas) => {
   })));
 
   // Lines
-  const lm = new window.THREE.LineBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.025 });
+  const lm = new THREE.LineBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.025 });
   for (let i = 0; i < 8; i++) {
     const pts = [];
     const cx = (Math.random() - 0.5) * 80;
     const cy = (Math.random() - 0.5) * 50;
     for (let j = 0; j < 50; j++) {
-      pts.push(new window.THREE.Vector3(
+      pts.push(new THREE.Vector3(
         cx + (Math.random() - 0.5) * 40,
         cy + (Math.random() - 0.5) * 30,
         (Math.random() - 0.5) * 20
       ));
     }
-    scene.add(new window.THREE.Line(new window.THREE.BufferGeometry().setFromPoints(pts), lm));
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), lm));
   }
 
   // Torus rings
-  const rm = new window.THREE.MeshBasicMaterial({ color: 0xf0a500, wireframe: true, transparent: true, opacity: 0.04 });
-  const r1 = new window.THREE.Mesh(new window.THREE.TorusGeometry(30, 0.2, 8, 80), rm);
+  const rm = new THREE.MeshBasicMaterial({ color: 0xf0a500, wireframe: true, transparent: true, opacity: 0.04 });
+  const r1 = new THREE.Mesh(new THREE.TorusGeometry(30, 0.2, 8, 80), rm);
   r1.rotation.x = 1.1;
   scene.add(r1);
   
-  const r2 = new window.THREE.Mesh(new window.THREE.TorusGeometry(22, 0.15, 6, 60), rm);
+  const r2 = new THREE.Mesh(new THREE.TorusGeometry(22, 0.15, 6, 60), rm);
   r2.rotation.x = 0.6;
   r2.rotation.z = 0.4;
   scene.add(r2);
@@ -118,24 +100,29 @@ export const initBackgroundCanvas = (canvas) => {
 
 // Three.js hero canvas
 export const initHeroCanvas = (canvas) => {
-  if (!canvas || !window.THREE) return;
+  if (!canvas) return;
+
+  // Wait for canvas to have actual dimensions
+  const w = canvas.offsetWidth || canvas.parentElement?.offsetWidth || 500;
+  const h = canvas.offsetHeight || canvas.parentElement?.offsetHeight || 600;
+  if (w === 0 || h === 0) return;
 
   let renderer;
   try {
-    renderer = new window.THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: false });
   } catch(e) { console.warn('[WebGL] Home hero canvas skipped'); return; }
   renderer.setPixelRatio(1);
 
   function resize() {
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
+    const w = canvas.offsetWidth || 500;
+    const h = canvas.offsetHeight || 600;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
   }
 
-  const scene = new window.THREE.Scene();
-  const camera = new window.THREE.PerspectiveCamera(50, 1, 0.1, 100);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100);
   camera.position.z = 18;
   resize();
   window.addEventListener('resize', resize);
@@ -149,7 +136,7 @@ export const initHeroCanvas = (canvas) => {
     const y = 1 - (i / (NODE_COUNT - 1)) * 2;
     const r = Math.sqrt(1 - y * y);
     const theta = phi * i;
-    nodePos.push(new window.THREE.Vector3(
+    nodePos.push(new THREE.Vector3(
       Math.cos(theta) * r * RADIUS,
       y * RADIUS,
       Math.sin(theta) * r * RADIUS
@@ -157,13 +144,13 @@ export const initHeroCanvas = (canvas) => {
   }
 
   // Edges between nodes
-  const edgeMat = new window.THREE.LineBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.18 });
-  const edgeGroup = new window.THREE.Group();
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.18 });
+  const edgeGroup = new THREE.Group();
   for (let i = 0; i < NODE_COUNT; i++) {
     for (let j = i + 1; j < NODE_COUNT; j++) {
       if (nodePos[i].distanceTo(nodePos[j]) < 4.5) {
-        edgeGroup.add(new window.THREE.Line(
-          new window.THREE.BufferGeometry().setFromPoints([nodePos[i], nodePos[j]]),
+        edgeGroup.add(new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints([nodePos[i], nodePos[j]]),
           edgeMat.clone()
         ));
       }
@@ -172,16 +159,16 @@ export const initHeroCanvas = (canvas) => {
   scene.add(edgeGroup);
 
   // Node spheres
-  const nodeGroup = new window.THREE.Group();
-  const smallSphere = new window.THREE.SphereGeometry(0.1, 8, 8);
+  const nodeGroup = new THREE.Group();
+  const smallSphere = new THREE.SphereGeometry(0.1, 8, 8);
   const nodeMats = [
-    new window.THREE.MeshPhongMaterial({ color: 0xf0a500, emissive: 0xf0a500, emissiveIntensity: 0.6 }),
-    new window.THREE.MeshPhongMaterial({ color: 0x00d4aa, emissive: 0x00d4aa, emissiveIntensity: 0.5 }),
-    new window.THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x3b82f6, emissiveIntensity: 0.4 })
+    new THREE.MeshPhongMaterial({ color: 0xf0a500, emissive: 0xf0a500, emissiveIntensity: 0.6 }),
+    new THREE.MeshPhongMaterial({ color: 0x00d4aa, emissive: 0x00d4aa, emissiveIntensity: 0.5 }),
+    new THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x3b82f6, emissiveIntensity: 0.4 })
   ];
   
   nodePos.forEach((pos, i) => {
-    const mesh = new window.THREE.Mesh(smallSphere, nodeMats[i % nodeMats.length]);
+    const mesh = new THREE.Mesh(smallSphere, nodeMats[i % nodeMats.length]);
     mesh.position.copy(pos);
     const s = 0.8 + Math.random() * 0.8;
     mesh.scale.setScalar(s);
@@ -191,40 +178,40 @@ export const initHeroCanvas = (canvas) => {
   scene.add(nodeGroup);
 
   // Wireframe icosahedron
-  scene.add(new window.THREE.Mesh(
-    new window.THREE.IcosahedronGeometry(7, 2),
-    new window.THREE.MeshBasicMaterial({ color: 0xf0a500, wireframe: true, transparent: true, opacity: 0.05 })
+  scene.add(new THREE.Mesh(
+    new THREE.IcosahedronGeometry(7, 2),
+    new THREE.MeshBasicMaterial({ color: 0xf0a500, wireframe: true, transparent: true, opacity: 0.05 })
   ));
 
   // Core sphere
-  const coreMat = new window.THREE.MeshPhongMaterial({
+  const coreMat = new THREE.MeshPhongMaterial({
     color: 0xf0a500,
     emissive: 0xf0a500,
     emissiveIntensity: 1,
     transparent: true,
     opacity: 0.6
   });
-  const core = new window.THREE.Mesh(new window.THREE.SphereGeometry(1.2, 32, 32), coreMat);
+  const core = new THREE.Mesh(new THREE.SphereGeometry(1.2, 32, 32), coreMat);
   scene.add(core);
 
   // Lights
-  scene.add(new window.THREE.AmbientLight(0x0d1117, 1));
+  scene.add(new THREE.AmbientLight(0x0d1117, 1));
   
-  const pl1 = new window.THREE.PointLight(0xf0a500, 3, 30);
+  const pl1 = new THREE.PointLight(0xf0a500, 3, 30);
   pl1.position.set(5, 5, 5);
   scene.add(pl1);
   
-  const pl2 = new window.THREE.PointLight(0x00d4aa, 2, 25);
+  const pl2 = new THREE.PointLight(0x00d4aa, 2, 25);
   pl2.position.set(-8, -5, 8);
   scene.add(pl2);
   
-  const pl3 = new window.THREE.PointLight(0x3b82f6, 1.5, 20);
+  const pl3 = new THREE.PointLight(0x3b82f6, 1.5, 20);
   pl3.position.set(0, 8, -5);
   scene.add(pl3);
 
   // Ring
-  const ringMat = new window.THREE.MeshBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.25 });
-  const ring = new window.THREE.Mesh(new window.THREE.TorusGeometry(7.2, 0.04, 8, 120), ringMat);
+  const ringMat = new THREE.MeshBasicMaterial({ color: 0xf0a500, transparent: true, opacity: 0.25 });
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(7.2, 0.04, 8, 120), ringMat);
   ring.rotation.x = Math.PI / 2;
   scene.add(ring);
 
@@ -286,11 +273,6 @@ export const initHeroCanvas = (canvas) => {
 
 // GSAP animations
 export const initGSAPAnimations = () => {
-  if (!window.gsap) return;
-
-  const gsap = window.gsap;
-  gsap.registerPlugin(window.ScrollTrigger);
-
   gsap.to('#site-header', { y: 0, duration: 0.8, ease: 'power3.out', delay: 0.1 });
 
   const htl = gsap.timeline({ delay: 0.4 });
@@ -312,7 +294,7 @@ export const initGSAPAnimations = () => {
   revealSec('#t-eye', '#t-h2', '#testimonials');
 
   // Counter animation
-  window.ScrollTrigger.create({
+  ScrollTrigger.create({
     trigger: '#cnt1',
     start: 'top 85%',
     once: true,
@@ -351,7 +333,7 @@ export const initGSAPAnimations = () => {
   gsap.to('#cta-strip', { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '#cta-strip', start: 'top 82%' } });
 
   // Scroll header background change
-  window.ScrollTrigger.create({
+  ScrollTrigger.create({
     start: 'top -60',
     onUpdate: s => {
       const header = document.getElementById('site-header');
@@ -364,7 +346,7 @@ export const initGSAPAnimations = () => {
   // Floating cards animation
   document.querySelectorAll('.float-card').forEach(c => {
     gsap.to(c, {
-      y: '-=-8',
+      y: '-=8',
       duration: 2 + Math.random(),
       repeat: -1,
       yoyo: true,
@@ -372,4 +354,7 @@ export const initGSAPAnimations = () => {
       delay: Math.random() * 1.5
     });
   });
+
+  // Refresh ScrollTrigger after all animations set up
+  ScrollTrigger.refresh();
 };
