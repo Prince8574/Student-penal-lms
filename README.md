@@ -1,213 +1,179 @@
-<div align="center">
+# LearnVerse — Student Panel
 
-# LEARNING MANAGEMENT SYSTEM
-## Student Panel — Project Report
-
----
-
-**Project Title:** LMS Student Portal  
-**Technology Stack:** React.js · Node.js · Express.js · MongoDB  
-**Repository:** [Student-penal-lms](https://github.com/Prince8574/Student-penal-lms)  
-**Author:** Prince  
-**Version:** 1.0.0
+> AI-powered Learning Management System for students, built with React, Node.js, Express & MongoDB.
 
 ---
 
-</div>
+## Tech Stack
 
-## 1. Project Overview
-
-The **LMS Student Panel** is a feature-rich web application that serves as the primary interface for students enrolled in the Learning Management System. It enables students to explore courses, track their learning progress, submit assignments, view grades, earn certificates, and engage with the learning community.
-
----
-
-## 2. Objectives
-
-- Provide students with an intuitive and engaging learning interface
-- Enable seamless course discovery, enrollment, and payment
-- Track assignment submissions and academic performance
-- Generate and display certificates upon course completion
-- Foster community engagement through posts and messaging
-- Deliver a personalized profile and settings experience
+| Layer | Technology |
+|-------|-----------|
+| Frontend | React 18, GSAP, Three.js, Axios |
+| Backend | Node.js, Express.js |
+| Database | MongoDB Atlas (Mongoose) |
+| Auth | JWT, OTP (Email), Google OAuth 2.0 |
+| AI Assistant | Groq API |
+| Email | Nodemailer (Gmail) |
+| File Upload | Multer |
 
 ---
 
-## 3. System Architecture
+## Features
 
-```
-┌─────────────────────────────────────────────────┐
-│                  CLIENT LAYER                   │
-│         React.js + GSAP + Three.js              │
-└────────────────────┬────────────────────────────┘
-                     │ HTTP / REST API
-┌────────────────────▼────────────────────────────┐
-│                 SERVER LAYER                    │
-│          Node.js + Express.js (Port 5001)       │
-│  Auth · Courses · Assignments · Payments · Chat │
-└────────────────────┬────────────────────────────┘
-                     │ Mongoose ODM
-┌────────────────────▼────────────────────────────┐
-│               DATABASE LAYER                    │
-│              MongoDB Atlas                      │
-└─────────────────────────────────────────────────┘
-```
+- Google OAuth 2.0 Sign In / Sign Up (auto-register)
+- Email + OTP two-step login & registration
+- Forgot / Reset password via OTP
+- Course exploration & enrollment
+- Assignment submission with file upload
+- Grades & performance charts
+- Certificate download (PDF)
+- Community posts & messaging
+- AI Assistant (Groq-powered)
+- Profile with avatar crop & social links
+- Notifications system
+- Settings & preferences
+- Industry-level server + browser console logs
+- Three.js animated hero & background
+- GSAP scroll animations
 
 ---
 
-## 4. Module Description
-
-| # | Module | Description |
-|---|--------|-------------|
-| 1 | **Authentication** | Register, login, OTP verification, forgot password |
-| 2 | **Home** | Landing page with featured courses, testimonials, and CTAs |
-| 3 | **Explore** | Browse and filter all available courses by category |
-| 4 | **My Courses** | View enrolled courses and track learning progress |
-| 5 | **Assignments** | Submit assignments, view deadlines, and receive feedback |
-| 6 | **Grades** | View performance charts, quiz scores, and grade history |
-| 7 | **Certificates** | Download PDF certificates for completed courses |
-| 8 | **Profile** | Edit personal info, avatar, stats heatmap, Pomodoro timer |
-| 9 | **Community** | Create posts, reply to discussions, and send messages |
-| 10 | **Notifications** | Real-time alerts for grades, deadlines, and announcements |
-| 11 | **Settings** | Account, appearance, privacy, security, and learning preferences |
-
----
-
-## 5. Technology Stack
-
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| Frontend Framework | React.js 18 | UI rendering and component management |
-| Animation | GSAP | Smooth UI transitions and animations |
-| 3D Graphics | Three.js | Background visual effects |
-| Backend Runtime | Node.js | Server-side JavaScript execution |
-| Web Framework | Express.js | REST API routing and middleware |
-| Database | MongoDB Atlas | NoSQL cloud database |
-| ODM | Mongoose | MongoDB object modeling |
-| Authentication | JWT + bcryptjs | Secure token-based auth |
-| File Upload | Multer | Profile photo and document uploads |
-| Email Service | Nodemailer | OTP and notification emails |
-| PDF Generation | PDFKit | Certificate PDF creation |
-
----
-
-## 6. Project Structure
+## Project Structure
 
 ```
 student-panel/
-├── public/                        # Static assets
+├── public/
+│   └── manifest.json
 ├── src/
-│   ├── backend/                   # Node.js + Express server
-│   │   ├── config/
-│   │   │   └── db.js              # MongoDB connection
-│   │   ├── controllers/           # Business logic handlers
-│   │   ├── middleware/            # Auth & validation middleware
-│   │   ├── models/                # Mongoose data models
-│   │   ├── routes/                # API route definitions
-│   │   ├── services/              # Certificate & email services
-│   │   └── server.js              # Express app entry point
-│   ├── frontend/                  # React pages & components
-│   │   ├── Auth/                  # Login, register, OTP
-│   │   ├── Home/                  # Landing page
-│   │   ├── Explore/               # Course discovery
-│   │   ├── MyCourses/             # Enrolled courses
-│   │   ├── Assignments/           # Assignment portal
-│   │   ├── Grades/                # Grades & certificates
-│   │   ├── Profile/               # Student profile
-│   │   ├── Community/             # Posts & messaging
-│   │   ├── Notifications/         # Alerts & updates
-│   │   └── Settings/              # User preferences
-│   ├── components/                # Shared UI components
-│   ├── context/                   # React context (Auth)
-│   ├── services/                  # API service layer
-│   └── App.js                     # Root component & routing
-├── .gitignore
-├── package.json
-└── README.md
+│   ├── backend/
+│   │   ├── config/          # DB connection
+│   │   ├── controllers/     # Auth, User, Assignment, Submission, Post
+│   │   ├── middleware/      # JWT auth, role authorization
+│   │   ├── models/          # User, Submission, Course, etc.
+│   │   ├── routes/          # All API routes + Google OAuth
+│   │   ├── services/        # Email, Certificate
+│   │   └── server.js
+│   ├── components/          # Sidebar, TopBar, AIAssistant
+│   ├── context/             # AuthContext
+│   ├── frontend/
+│   │   ├── Auth/            # Login, Register, ForgotPassword, GoogleCallback
+│   │   ├── Assignments/     # Assignment list, detail, submit
+│   │   ├── Community/       # Posts & discussions
+│   │   ├── Explore/         # Course discovery
+│   │   ├── Grades/          # Grades, certificates, charts
+│   │   ├── Home/            # Landing with Three.js + GSAP
+│   │   ├── MyCourses/       # Enrolled courses
+│   │   ├── Notifications/   # Notification center
+│   │   ├── Profile/         # Profile & edit
+│   │   └── Settings/        # User settings
+│   ├── services/            # API service (axios)
+│   ├── utils/               # safeWebGL helper
+│   └── App.js
+└── package.json
 ```
 
 ---
 
-## 7. API Endpoints Summary
+## Getting Started
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Student registration |
-| POST | `/api/auth/login` | Student login |
-| GET | `/api/courses` | Get all available courses |
-| POST | `/api/enrollments` | Enroll in a course |
-| GET | `/api/assignments` | Get student assignments |
-| POST | `/api/assignments/:id/submit` | Submit assignment |
-| GET | `/api/users/profile` | Get student profile |
-| PUT | `/api/users/profile` | Update student profile |
-| GET | `/api/grades` | Get student grades |
+### 1. Install dependencies
 
----
-
-## 8. Installation & Setup
-
-### Prerequisites
-- Node.js v18+
-- MongoDB Atlas account
-- npm or yarn
-
-### Frontend Setup
 ```bash
+# Frontend
 cd student-panel
 npm install
+
+# Backend
+cd student-panel/src/backend
+npm install
+```
+
+### 2. Configure environment
+
+Create `student-panel/src/backend/.env`:
+
+```env
+PORT=5001
+MONGODB_URI=your_mongodb_uri
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRE=7d
+COOKIE_EXPIRE=7
+CLIENT_URL=http://localhost:3001
+EMAIL_USER=your_email@gmail.com
+EMAIL_PASS=your_app_password
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_CALLBACK_URL=http://localhost:5001/api/auth/google/callback
+GROQ_API_KEY=your_groq_api_key
+```
+
+Create `student-panel/.env`:
+
+```env
+PORT=3001
+```
+
+### 3. Run
+
+```bash
+# Backend
+cd student-panel/src/backend
+node server.js
+
+# Frontend (new terminal)
+cd student-panel
 npm start
 ```
 
-### Backend Setup
-```bash
-cd student-panel/src/backend
-npm install
-npm run dev
+Frontend: `http://localhost:3001`
+Backend API: `http://localhost:5001/api`
+
+---
+
+## Auth Flow
+
 ```
-
-### Environment Configuration
-
-Create `.env` file in `student-panel/src/backend/`:
-
-```env
-MONGO_URI        = your_mongodb_connection_string
-JWT_SECRET       = your_jwt_secret_key
-EMAIL_USER       = your_email@gmail.com
-EMAIL_PASS       = your_app_password
-PORT             = 5001
+Register → OTP verify → Dashboard
+Login    → OTP verify → Dashboard
+Google   → Auto register/login → Dashboard
 ```
 
 ---
 
-## 9. Database Models
+## API Endpoints
 
-| Model | Fields |
-|-------|--------|
-| **User** | name, email, password, avatar, enrolledCourses |
-| **Course** | title, description, price, curriculum, instructor |
-| **Enrollment** | studentId, courseId, progress, completedAt |
-| **Assignment** | title, courseId, dueDate, submissions |
-| **Submission** | studentId, assignmentId, fileUrl, grade, feedback |
-| **Payment** | studentId, courseId, amount, status, date |
-| **Post** | authorId, content, likes, comments |
-| **Message** | senderId, receiverId, content, timestamp |
-
----
-
-## 10. Security Measures
-
-- All protected routes require valid JWT token
-- Passwords hashed using bcryptjs (salt rounds: 10)
-- OTP verification for new registrations
-- Environment variables for all sensitive credentials
-- CORS configured for allowed origins only
-- Input validation on all API endpoints
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/register` | Register new student |
+| POST | `/api/auth/login` | Login (credentials check) |
+| POST | `/api/auth/send-otp` | Send OTP to email |
+| POST | `/api/auth/verify-otp` | Verify OTP |
+| POST | `/api/auth/forgot-password` | Send reset OTP |
+| POST | `/api/auth/reset-password` | Reset password |
+| GET | `/api/auth/google` | Google OAuth redirect |
+| GET | `/api/auth/google/callback` | Google OAuth callback |
+| GET | `/api/courses` | Browse courses |
+| GET | `/api/assignments` | Get assignments |
+| POST | `/api/submissions/:id` | Submit assignment |
+| GET | `/api/users/profile` | Get profile |
+| PUT | `/api/users/profile` | Update profile |
 
 ---
 
-<div align="center">
+## Google OAuth Setup
+
+See [GOOGLE_OAUTH_SETUP.md](../GOOGLE_OAUTH_SETUP.md) for full setup guide.
+
+Google Console redirect URIs needed:
+```
+http://localhost:5000/api/auth/google/callback
+http://localhost:5001/api/auth/google/callback
+```
 
 ---
 
-**LMS Student Panel** · Built with React & Node.js · © 2025 ❤️ Prince
+## Environment Notes
 
-</div>
+- `.env` files are gitignored — never commit secrets
+- OTP expires in 10 minutes
+- Google OAuth auto-creates student accounts on first login
