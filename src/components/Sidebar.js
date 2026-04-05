@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { AnimatedAvatarSmall } from "./AnimatedAvatarSmall";
 
 const T = {
   sidebar: "#0B0F1A",
@@ -167,16 +168,8 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         flexShrink: 0,
       }}>
         {/* Avatar */}
-        <div onClick={() => navigate('/profile')} style={{
-          width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-          background: avatarUrl ? 'transparent' : G.gold,
-          display: "grid", placeItems: "center", cursor: "pointer",
-          overflow: "hidden", boxShadow: "0 0 10px rgba(240,165,0,.2)",
-        }}>
-          {avatarUrl
-            ? <img src={avatarUrl} alt="avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            : <span style={{ fontSize: ".75rem", fontWeight: 800, color: "#fff" }}>{userInitials}</span>
-          }
+        <div onClick={() => navigate('/profile')} style={{ cursor: "pointer" }}>
+          <AnimatedAvatarSmall avatarUrl={avatarUrl} initials={userInitials} size={34} />
         </div>
 
         {!collapsed && (
