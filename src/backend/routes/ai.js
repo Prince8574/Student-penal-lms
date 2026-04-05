@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/auth');
 
+// GET /api/ai/health — public health check
+router.get('/health', (req, res) => {
+  res.json({ success: true, status: 'ok', service: 'AI Assistant', groq: !!process.env.GROQ_API_KEY });
+});
+
 // POST /api/ai/chat
 router.post('/chat', protect, async (req, res) => {
   const { messages } = req.body;
