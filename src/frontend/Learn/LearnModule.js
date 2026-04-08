@@ -5,6 +5,9 @@ import * as THREE from "three";
 import "./LearnModule.css";
 
 const T = {
+  bg:"#030810", text:"#f0f6ff", text2:"#8899b8", text3:"#3a4f6e",
+  gold:"#f0a500", green:"#4ade80", purple:"#7c2fff", red:"#ef4444", teal:"#00d4aa",
+};
 
 /* ─── THREE.JS SPACE BG ─── */
 function SpaceBackground() {
