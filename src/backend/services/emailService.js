@@ -63,7 +63,7 @@ async function sendOTPEmail(to, otp, { name, purpose } = {}) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'api-key': process.env.BREVO_API_KEY,
+        'api-key': (process.env.BREVO_API_KEY || '').trim(),
         'Content-Length': Buffer.byteLength(payload),
       },
     };
