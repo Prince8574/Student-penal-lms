@@ -26,6 +26,7 @@ const clog = (type, action, msg, data = null) => {
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true,
+  timeout: 60000,
   headers: { 'Content-Type': 'application/json' }
 });
 
