@@ -66,9 +66,13 @@ function ParticleGlobe({ containerRef }) {
       var phi = Math.acos(2*Math.random()-1);
       var theta = 2*Math.PI*Math.random();
       var r = 2 + (Math.random()-0.5)*0.25;
-      pos[i*3]=r*Math.sin(phi)*Math.cos(theta); pos[i*3+1]=r*Math.sin(phi)*Math.sin(theta); pos[i*3+2]=r*Math.cos(phi);
+      pos[i*3]=r*Math.sin(phi)*Math.cos(theta);
+      pos[i*3+1]=r*Math.sin(phi)*Math.sin(theta);
+      pos[i*3+2]=r*Math.cos(phi);
       var c = palette[Math.floor(Math.random()*palette.length)];
-      cols[i*3]=c.r; cols[i*3+1]=c.g; cols[i*3+2]=c.b;
+      cols[i*3]=c.r;
+      cols[i*3+1]=c.g;
+      cols[i*3+2]=c.b;
     }
     geo.setAttribute("position", new THREE.BufferAttribute(pos,3));
     geo.setAttribute("color", new THREE.BufferAttribute(cols,3));
@@ -106,7 +110,7 @@ function ParticleGlobe({ containerRef }) {
 
 /* ─── Explore tab (user's landing page content) ─────────────────── */
 const EXPLORE_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
 .ex-wrap{max-width:1140px;margin:0 auto;padding:64px 40px}
 .ex-wrap-tight{max-width:1140px;margin:0 auto;padding:0 40px 64px}
 .ex-hero{position:relative;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;text-align:center}

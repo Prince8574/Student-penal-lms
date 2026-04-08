@@ -9,7 +9,7 @@ const T = {
 };
 
 const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,900&family=Satoshi:wght@400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Satoshi:wght@400;500;600;700;900&display=swap');
 *,::before,::after{box-sizing:border-box;margin:0;padding:0}
 body{background:#030810;color:#f0f6ff;font-family:'Satoshi',sans-serif;overflow:hidden;height:100vh}
 @keyframes spin{to{transform:rotate(360deg)}}
