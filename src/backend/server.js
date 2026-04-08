@@ -9,15 +9,12 @@ const { connectDB, registerShutdownHooks, dbStatus } = require('./config/db');
 const app = express();
 
 // Middleware
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:3001', 'http://127.0.0.1:3001'];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:3001',
-    'http://127.0.0.1:3001',
-    'http://localhost:3002',
-    'http://127.0.0.1:3002',
-  ],
+  origin: allowedOrigins,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -75,8 +72,8 @@ const PORT = process.env.PORT || 5001;
 
 connectDB().then(() => {
   registerShutdownHooks();
-  const server = app.listen(PORT, '127.0.0.1', () => {
-    console.log(`🚀 Student server running on http://localhost:${PORT}`);
+  const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Student server running on port ${PORT}`);
     console.log(`📍 API: http://localhost:${PORT}/api`);
   });
 
