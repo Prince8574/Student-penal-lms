@@ -208,7 +208,7 @@ function LoginForm({ onSuccess, switchToRegister, switchToForgot }) {
               background: 'rgba(124,47,255,.12)', border: '1px solid rgba(124,47,255,.25)',
               display: 'grid', placeItems: 'center', margin: '0 auto 14px', fontSize: '1.4rem'
             }}>🔐</div>
-            <div style={{ fontSize: '.84rem', color: 'var(--t2, #aaa)' }}>
+            <div style={{ fontSize: '.84rem', color: 'var(--t2, #aaa)', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
               Check <strong>{email}</strong> for the code
             </div>
           </div>

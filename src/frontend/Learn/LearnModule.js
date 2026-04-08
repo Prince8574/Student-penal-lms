@@ -2,42 +2,9 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import * as THREE from "three";
+import "./LearnModule.css";
 
 const T = {
-  bg:"#030810", text:"#f0f6ff", text2:"#8899b8", text3:"#3a4f6e",
-  gold:"#f0a500", green:"#4ade80", purple:"#7c2fff", red:"#ef4444", teal:"#00d4aa",
-};
-
-const CSS = `
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700;900&family=Satoshi:wght@400;500;600;700;900&display=swap');
-*,::before,::after{box-sizing:border-box;margin:0;padding:0}
-body{background:#030810;color:#f0f6ff;font-family:'Satoshi',sans-serif;overflow:hidden;height:100vh}
-@keyframes spin{to{transform:rotate(360deg)}}
-.learn-layout{display:flex;height:100vh;overflow:hidden;position:relative}
-.three-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
-.learn-sidebar{width:268px;flex-shrink:0;background:rgba(3,5,14,.96);border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:10;backdrop-filter:blur(20px)}
-.learn-main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;position:relative;z-index:10}
-.learn-topbar{display:flex;align-items:center;gap:12px;padding:11px 20px;background:rgba(2,4,12,.92);border-bottom:1px solid rgba(255,255,255,.05);flex-shrink:0;backdrop-filter:blur(20px)}
-.learn-content{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#0f1e38 transparent}
-.lesson-item{display:flex;align-items:center;gap:9px;padding:8px 12px;cursor:pointer;transition:all .2s;border-left:3px solid transparent;position:relative}
-.lesson-item:hover{background:rgba(255,255,255,.025)}
-.lesson-item.active{background:rgba(240,165,0,.07);border-left-color:#f0a500}
-.lesson-item.done{opacity:.55}
-.section-hdr{padding:9px 12px 5px;font-size:.56rem;letter-spacing:.14em;color:#2a3a50;text-transform:uppercase;font-weight:800;background:rgba(255,255,255,.012);border-bottom:1px solid rgba(255,255,255,.04)}
-.btn-prim{padding:9px 22px;border-radius:10px;border:none;background:linear-gradient(135deg,#f0a500,#ff7a30);color:#030810;font-family:'Satoshi',sans-serif;font-size:.82rem;font-weight:800;cursor:pointer;transition:all .22s}
-.btn-prim:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(240,165,0,.4)}
-.btn-ghost{padding:7px 14px;border-radius:9px;border:1px solid rgba(255,255,255,.07);background:transparent;color:#8899b8;font-family:'Satoshi',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s}
-.btn-ghost:hover{border-color:rgba(240,165,0,.3);color:#f0a500;background:rgba(240,165,0,.04)}
-.btn-ghost:disabled{opacity:.3;cursor:not-allowed}
-.quiz-opt{padding:11px 15px;border-radius:10px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);cursor:pointer;transition:all .2s;font-size:.84rem;color:#8899b8;line-height:1.5}
-.quiz-opt:hover{border-color:rgba(240,165,0,.28);background:rgba(240,165,0,.04);color:#f0f6ff}
-.quiz-opt.selected{border-color:#f0a500;background:rgba(240,165,0,.09);color:#f0f6ff}
-.quiz-opt.correct{border-color:#4ade80;background:rgba(74,222,128,.08);color:#4ade80}
-.quiz-opt.wrong{border-color:#ef4444;background:rgba(239,68,68,.08);color:#ef4444}
-.prog-bar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden}
-.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#f0a500,#ff7a30);transition:width .9s cubic-bezier(.4,0,.2,1)}
-.card{background:rgba(6,10,24,.88);border:1px solid rgba(255,255,255,.07);border-radius:16px;backdrop-filter:blur(12px);box-shadow:0 24px 64px rgba(0,0,0,.5)}
-`;
 
 /* ─── THREE.JS SPACE BG ─── */
 function SpaceBackground() {
@@ -480,7 +447,6 @@ export default function LearnModule() {
 
   return (
     <div className="learn-layout">
-      <style>{CSS}</style>
       <SpaceBackground/>
 
       {/* ── SIDEBAR ── */}

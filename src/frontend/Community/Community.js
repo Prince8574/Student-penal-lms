@@ -3,6 +3,7 @@ import * as THREE from "three";
 import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
 import { useAuth } from "../../context/AuthContext";
+import "./ExploreCommunity.css";
 /* ─── Design tokens ─────────────────────────────────────────────── */
 const T = {
   bg:"#050814", card:"rgba(9,16,36,.93)", bord:"rgba(255,255,255,.06)",
@@ -109,8 +110,6 @@ function ParticleGlobe({ containerRef }) {
 }
 
 /* ─── Explore tab (user's landing page content) ─────────────────── */
-const EXPLORE_CSS = `
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap');
 .ex-wrap{max-width:1140px;margin:0 auto;padding:64px 40px}
 .ex-wrap-tight{max-width:1140px;margin:0 auto;padding:0 40px 64px}
 .ex-hero{position:relative;min-height:520px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;text-align:center}
@@ -214,17 +213,12 @@ const EXPLORE_CSS = `
 .ex-submit{width:100%;padding:12px;background:linear-gradient(135deg,#4DFFCC,#38BDF8);color:#080B14;border:none;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.92rem;font-weight:700;cursor:pointer;margin-top:4px;transition:opacity .25s,transform .25s}
 .ex-submit:hover{opacity:.88;transform:translateY(-2px)}
 .ex-fine{text-align:center;font-size:.7rem;color:rgba(232,234,246,.28);margin-top:10px;font-family:'DM Sans',sans-serif}
-@media(max-width:900px){.ex-members{grid-template-columns:repeat(2,1fr)}.ex-feed-layout{grid-template-columns:1fr}.ex-cta-box{grid-template-columns:1fr;gap:28px}.ex-stats-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.ex-members{grid-template-columns:1fr}.ex-wrap,.ex-wrap-tight{padding:40px 16px}.ex-cta,.ex-cta-box{padding:28px 16px}.ex-f2{grid-template-columns:1fr}}
-`;
-
 function ExploreSection({ onJoin }) {
   const canvasRef = useRef(null);
   const [activeCat, setActiveCat] = useState("All");
 
   return (
     <div style={{ overflowY:"auto", flex:1, background:"#050814" }}>
-      <style>{EXPLORE_CSS}</style>
 
       {/* Hero */}
       <div className="ex-hero">

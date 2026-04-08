@@ -327,7 +327,7 @@ function RegisterForm({ onSuccess, switchToLogin }) {
               background: 'rgba(124,47,255,.12)', border: '1px solid rgba(124,47,255,.25)',
               display: 'grid', placeItems: 'center', margin: '0 auto 16px', fontSize: '1.6rem',
             }}>📧</div>
-            <div style={{ fontSize: '.84rem', color: '#6b5b8e', lineHeight: 1.65 }}>
+            <div style={{ fontSize: '.84rem', color: '#6b5b8e', lineHeight: 1.65, wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
               Check <span style={{ color: '#ede8ff', fontWeight: 600 }}>{email}</span> for your verification code.
               <br />It expires in <span style={{ color: '#f02079', fontWeight: 700 }}>10 minutes</span>.
             </div>
