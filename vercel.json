@@ -2,7 +2,8 @@
   "build": {
     "env": {
       "DISABLE_ESLINT_PLUGIN": "true",
-      "GENERATE_SOURCEMAP": "false"
+      "GENERATE_SOURCEMAP": "false",
+      "REACT_APP_API_URL": "https://student-penal-lms.onrender.com/api"
     }
   }
 }

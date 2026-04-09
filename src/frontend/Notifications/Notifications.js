@@ -6,8 +6,9 @@ import { T } from "../Assignments/utils/constants";
 import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
 import "../Assignments/Assignments.css";
+import API_BASE from '../../config/api';
 
-var API = "http://localhost:5001/api";
+var API = `${API_BASE}/api`;
 
 var TYPE_META = {
   assignment: { label:"Assignment", color:"#4F6EF7", bg:"rgba(79,110,247,.08)",  bord:"rgba(79,110,247,.2)"  },

@@ -49,6 +49,14 @@ export const AuthProvider = ({ children }) => {
       if (!response.data?.success) {
         throw new Error(response.data?.message || 'Login failed');
       }
+      
+      // TEMPORARY FIX: If token is returned, save it (OTP disabled)
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        setUser(response.data.user);
+        return { success: true, token: response.data.token };
+      }
+      
       // Credentials verified — OTP step handled by LoginForm
       return { success: true };
     } catch (error) {

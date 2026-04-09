@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { gsap } from "gsap";
 import * as THREE from "three";
+import API_BASE from '../../config/api';
 import "./LearnModule.css";
 
 const T = {
@@ -368,7 +369,7 @@ export default function LearnModule() {
 
   // Load course
   useEffect(() => {
-    fetch(`http://localhost:5001/api/courses/${courseId}`)
+    fetch(`${API_BASE}/api/courses/${courseId}`)
       .then(r => r.json())
       .then(d => {
         if (d.success && d.data) {
@@ -385,7 +386,7 @@ export default function LearnModule() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token || !courseId) return;
-    fetch(`http://localhost:5001/api/enrollments/course/${courseId}`, {
+    fetch(`${API_BASE}/api/enrollments/course/${courseId}`, {
       headers: { Authorization: "Bearer " + token }
     })
       .then(r => r.json())
@@ -419,7 +420,7 @@ export default function LearnModule() {
     // Save to backend
     const token = localStorage.getItem("token");
     if (!token || !enrollmentId) return;
-    fetch(`http://localhost:5001/api/enrollments/${enrollmentId}/lesson`, {
+    fetch(`${API_BASE}/api/enrollments/${enrollmentId}/lesson`, {
       method: "PUT",
       headers: { "Content-Type": "application/json", Authorization: "Bearer " + token },
       body: JSON.stringify({ lessonId, lessonTitle: activeLesson.title })

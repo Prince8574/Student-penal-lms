@@ -2,6 +2,12 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
 
+console.log('🔧 API Configuration:', {
+  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+  API_URL: API_URL,
+  NODE_ENV: process.env.NODE_ENV
+});
+
 // ─── Browser Console Logger ──────────────────────────────
 const clog = (type, action, msg, data = null) => {
   const cfg = {
@@ -126,21 +132,84 @@ export const userAPI = {
 };
 
 // ─── Courses ─────────────────────────────────────────────
+// Helper to fix thumbnail URLs from admin server to student server
+const fixThumbnailUrl = (course) => {
+  if (course && course.thumbnail && typeof course.thumbnail === 'string') {
+    // If thumbnail has admin server URL, replace with student server URL
+    if (course.thumbnail.includes('localhost:5000') || course.thumbnail.includes('admin-backend')) {
+      // Extract just the filename
+      const filename = course.thumbnail.split('/uploads/').pop();
+      // Use student server URL
+      const studentServerUrl = process.env.REACT_APP_API_URL?.replace('/api', '') || 'http://localhost:5001';
+      course.thumbnail = `${studentServerUrl}/uploads/${filename}`;
+    }
+  }
+  return course;
+};
+
 export const courseAPI = {
-  getAll:    (params) => api.get('/courses', { params }),
-  getOne:    (id)     => api.get(`/courses/${id}`),
-  getMyCourses: ()    => api.get('/courses/my-courses'),
+  getAll: (params) => {
+    console.log('📡 courseAPI.getAll called with params:', params);
+    console.log('📡 Making request to:', `${API_URL}/courses`);
+    return api.get('/courses', { params }).then(res => {
+      console.log('✅ courseAPI.getAll response:', res.data);
+      // Fix thumbnail URLs for all courses
+      if (res.data?.data && Array.isArray(res.data.data)) {
+        res.data.data = res.data.data.map(fixThumbnailUrl);
+      }
+      return res;
+    }).catch(err => {
+      console.error('❌ courseAPI.getAll error:', err.response?.data || err.message);
+      throw err;
+    });
+  },
+  getOne: (id) => api.get(`/courses/${id}`).then(res => {
+    // Fix thumbnail URL for single course
+    if (res.data?.data) {
+      res.data.data = fixThumbnailUrl(res.data.data);
+    }
+    return res;
+  }),
+  getMyCourses: () => api.get('/courses/my-courses').then(res => {
+    // Fix thumbnail URLs for my courses
+    if (res.data?.data && Array.isArray(res.data.data)) {
+      res.data.data = res.data.data.map(enrollment => {
+        if (enrollment.course) {
+          enrollment.course = fixThumbnailUrl(enrollment.course);
+        }
+        return enrollment;
+      });
+    }
+    return res;
+  }),
   addReview: (id, data) => api.post(`/courses/${id}/reviews`, data),
 };
 
 // ─── Enrollments ─────────────────────────────────────────
 export const enrollmentAPI = {
-  enroll:         (courseId, paymentData) => api.post(`/enrollments/${courseId}`, paymentData || {}),
-  getMyEnrollments: ()             => api.get('/enrollments/my-courses'),
-  getEnrollment:  (courseId)       => api.get(`/enrollments/course/${courseId}`),
+  enroll: (courseId, paymentData) => api.post(`/enrollments/${courseId}`, paymentData || {}),
+  getMyEnrollments: () => api.get('/enrollments/my-courses').then(res => {
+    // Fix thumbnail URLs for enrolled courses
+    if (res.data?.data && Array.isArray(res.data.data)) {
+      res.data.data = res.data.data.map(enrollment => {
+        if (enrollment.course) {
+          enrollment.course = fixThumbnailUrl(enrollment.course);
+        }
+        return enrollment;
+      });
+    }
+    return res;
+  }),
+  getEnrollment: (courseId) => api.get(`/enrollments/course/${courseId}`).then(res => {
+    // Fix thumbnail URL for enrollment course
+    if (res.data?.data?.course) {
+      res.data.data.course = fixThumbnailUrl(res.data.data.course);
+    }
+    return res;
+  }),
   updateProgress: (enrollmentId, data) => api.put(`/enrollments/${enrollmentId}/progress`, data),
-  updateLesson:   (enrollmentId, data) => api.put(`/enrollments/${enrollmentId}/lesson`, data),
-  completeCourse: (enrollmentId)   => api.put(`/enrollments/${enrollmentId}/complete`),
+  updateLesson: (enrollmentId, data) => api.put(`/enrollments/${enrollmentId}/lesson`, data),
+  completeCourse: (enrollmentId) => api.put(`/enrollments/${enrollmentId}/complete`),
 };
 
 // ─── Payments ────────────────────────────────────────────

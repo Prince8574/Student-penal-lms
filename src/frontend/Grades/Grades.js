@@ -3,6 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import axios from "axios";
+import API_BASE from '../../config/api';
 import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
 import GradeCard from "./components/GradeCard";
@@ -14,7 +15,7 @@ import "./Grades.css";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const API = "http://localhost:5001/api";
+const API = `${API_BASE}/api`;
 
 /* ── Grade letter helper ── */
 function getGradeLetter(pct) {

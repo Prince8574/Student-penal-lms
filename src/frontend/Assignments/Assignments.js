@@ -9,8 +9,9 @@ import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
 import AssignCard from "./components/AssignCard";
 import RightPanel from "./components/RightPanel";
+import API_BASE from '../../config/api';
 
-const API_URL = 'http://localhost:5001/api';
+const API_URL = `${API_BASE}/api`;
 
 /* ══════════════════════════════CSS══════════════════════════════ */
 const CSS = `

@@ -6,8 +6,9 @@ import { T } from "./utils/constants";
 import { useBg } from "./hooks/useBackground";
 import SubmitModal from "./components/SubmitModal";
 import FeedbackModal from "./components/FeedbackModal";
+import API_BASE from '../../config/api';
 
-var API_URL = "http://localhost:5001/api";
+var API_URL = `${API_BASE}/api`;
 var COURSE_COLORS = ["#f0a500","#00d4aa","#a78bfa","#3b82f6","#4ade80","#f472b6","#60a5fa","#f59e0b"];
 
 export default function AssignmentDetail() {

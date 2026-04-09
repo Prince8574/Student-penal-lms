@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../context/AuthContext';
 import { authAPI } from '../../../services/api';
+import API_BASE from '../../../config/api';
 
 function getPwdStrength(pwd) {
   if (!pwd) return { score: 0, label: '', color: '' };
@@ -203,7 +204,7 @@ function RegisterForm({ onSuccess, switchToLogin }) {
 
           <div className="social-row" style={{ marginBottom: 20 }}>
             <button className="social-btn" type="button" style={{ width:'100%', justifyContent:'center' }}
-              onClick={() => window.location.href = 'http://localhost:5001/api/auth/google'}>
+              onClick={() => window.location.href = `${API_BASE}/api/auth/google`}>
               <span style={{
                 width: 20, height: 20, borderRadius: 4, background: '#fff',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0

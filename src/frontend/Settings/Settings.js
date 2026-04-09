@@ -15,8 +15,9 @@ import { PrivacyPanel } from './components/panels/PrivacyPanel';
 import { SecurityPanel } from './components/panels/SecurityPanel';
 import { LearningPanel } from './components/panels/LearningPanel';
 import { AccessibilityPanel } from './components/panels/AccessibilityPanel';
+import API_BASE from '../../config/api';
 
-const API_URL = 'http://localhost:5001/api/settings';
+const API_URL = `${API_BASE}/api/settings`;
 
 export default function SettingsPage() {
   const navigate = useNavigate();

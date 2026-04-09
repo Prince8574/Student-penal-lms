@@ -72,8 +72,12 @@ async function sendOTPEmail(to, otp, { name, purpose } = {}) {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
-        if (res.statusCode >= 200 && res.statusCode < 300) resolve(data);
-        else reject(new Error(`Brevo API error: ${res.statusCode} ${data}`));
+        if (res.statusCode >= 200 && res.statusCode < 300) {
+          console.log(`✓ OTP email sent to ${to} via Brevo`);
+          resolve(data);
+        } else {
+          reject(new Error(`Brevo API error: ${res.statusCode} ${data}`));
+        }
       });
     });
     req.on('error', reject);

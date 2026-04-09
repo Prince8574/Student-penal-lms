@@ -4,9 +4,9 @@ import Sidebar from "../../../components/Sidebar";
 import TopBar from "../../../components/TopBar";
 import { ANum, SectionLabel } from "./UIElements";
 import { T } from "../utils/designTokens";
-import "./ExploreCategories.css";
+import API_BASE from '../../../config/api';
 
-const API = "http://localhost:5001/api";
+const API = `${API_BASE}/api`;
 
 // Category color map
 const CAT_COLORS = {

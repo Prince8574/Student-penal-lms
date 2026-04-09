@@ -52,6 +52,8 @@ exports.getCourses = async (req, res) => {
       { description: { $regex: search, $options: 'i' } },
     ];
 
+    console.log('🔍 getCourses: Filter query:', JSON.stringify(q));
+
     let cursor = rawCol().find(q);
 
     // Sort
@@ -62,9 +64,20 @@ exports.getCourses = async (req, res) => {
     if (limit) cursor = cursor.limit(Number(limit));
 
     const courses = await cursor.toArray();
+    
+    console.log('✅ getCourses: Found courses:', courses.length);
+    if (courses.length > 0) {
+      console.log('📋 getCourses: First course:', {
+        id: courses[0]._id,
+        title: courses[0].title,
+        status: courses[0].status,
+        isPublished: courses[0].isPublished
+      });
+    }
 
     res.status(200).json({ success: true, count: courses.length, data: courses });
   } catch (error) {
+    console.error('❌ getCourses error:', error);
     res.status(500).json({ success: false, message: 'Error fetching courses', error: error.message });
   }
 };

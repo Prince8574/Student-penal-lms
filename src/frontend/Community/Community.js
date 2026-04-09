@@ -3,6 +3,7 @@ import * as THREE from "three";
 import Sidebar from "../../components/Sidebar";
 import TopBar from "../../components/TopBar";
 import { useAuth } from "../../context/AuthContext";
+import API_BASE from "../../config/api";
 import "./Community.css";
 import "./ExploreCommunity.css";
 /* ─── Design tokens ─────────────────────────────────────────────── */
@@ -343,7 +344,7 @@ function CommentItem({ c, depth, postId, currentUserName, onDelete }) {
     setDeleted(true);
     setShowMenu(false);
     if (postId && c.id) {
-      fetch('http://localhost:5001/api/posts/' + postId + '/comments/' + c.id, {
+      fetch(`${API_BASE}/api/posts/${postId}/comments/${c.id}`, {
         method: 'DELETE',
         headers: { Authorization: 'Bearer ' + localStorage.getItem('token') }
       }).catch(function(){});
@@ -356,7 +357,7 @@ function CommentItem({ c, depth, postId, currentUserName, onDelete }) {
     setText(editText);
     setEditing(false);
     if (postId && c.id) {
-      fetch('http://localhost:5001/api/posts/' + postId + '/comments/' + c.id, {
+      fetch(`${API_BASE}/api/posts/${postId}/comments/${c.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('token') },
         body: JSON.stringify({ text: editText.trim() })
@@ -827,7 +828,8 @@ function MessagesTab() {
 }
 
 /* ─── Main Community page ───────────────────────────────────────── */
-const API = 'http://localhost:5001/api';
+
+const API = `${API_BASE}/api`;
 function authHeaders() {
   return { Authorization: 'Bearer ' + localStorage.getItem('token') };
 }

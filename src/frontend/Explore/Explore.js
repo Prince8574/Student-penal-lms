@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { enrollmentAPI } from "../../services/api";
+import { enrollmentAPI, courseAPI } from "../../services/api";
 import { CATEGORIES, PATHS, INSTRUCTORS, TRENDING_TOPICS } from "./data/exploreData";
 import { T } from "./utils/designTokens";
 import { useBg } from "./hooks/useBackground";
@@ -11,6 +11,7 @@ import CourseModal from "./components/CourseModal";
 import PathCard from "./components/PathCard";
 import PathModal from "./components/PathModal";
 import { Stars, SectionLabel, ANum } from "./components/UIElements";
+import DebugPanel from "./DebugPanel";
 import "./Explore.css";
 
 function ExploreCard({ course: c, idx, onOpen, enrolledIds, enrollmentMap = {} }) {
@@ -179,47 +180,64 @@ export default function ExplorePage() {
   }, []);
 
   // Fetch published courses from student panel backend
+  const fetchCourses = async () => {
+    try {
+      console.log('🔍 Explore: Fetching courses...');
+      const response = await courseAPI.getAll();
+      console.log('📦 Explore: API Response:', response.data);
+      
+      const coursesData = response.data?.data || [];
+      console.log('📚 Explore: Total courses received:', coursesData.length);
+      
+      if (coursesData.length > 0) {
+        const publishedCourses = coursesData.filter(c => c.status === "published" || c.isPublished === true);
+        console.log('✅ Explore: Published courses:', publishedCourses.length);
+        
+        const mapped = publishedCourses.map(c => ({
+          id:               c._id,
+          title:            c.title,
+          instructor:       typeof c.instructor === "object" ? c.instructor?.name || "Admin" : "Admin",
+          instructorAvatar: "AD",
+          instructorTitle:  (c.category || "Development") + " · Expert Instructor",
+          category:         c.category || "Development",
+          level:            c.level || "Beginner",
+          duration:         c.duration || "—",
+          lessons:          c.curriculum?.reduce((a,s) => a + (s.lessons?.length||0), 0) || 0,
+          rating:           c.rating || 0,
+          reviews:          0,
+          students:         c.enrolledStudents || 0,
+          price:            c.price || 0,
+          originalPrice:    c.originalPrice || c.price || 0,
+          tags:             Array.isArray(c.tags) ? c.tags : [],
+          description:      c.description || "",
+          thumbnail:        c.thumbnail || "",
+          gradient:         c.bg || "linear-gradient(135deg,#0a1830,#130840)",
+          accentGlow:       c.accentGlow || "rgba(124,47,255,.28)",
+          accent:           c.accent || "#7c2fff",
+          icon:             c.emoji || "📘",
+          badge:            c.badge || "New",
+          progress:         0,
+          nextLesson:       "",
+          certificate:      false,
+          outcomes:         Array.isArray(c.outcomes) ? c.outcomes : [],
+          updated:          new Date(c.updatedAt).toLocaleDateString("en-IN",{month:"short",year:"numeric"}),
+          lang:             c.language || "Hindi + English",
+        }));
+        
+        setCourses([...mapped]);
+        console.log('🎯 Explore: Courses set in state:', mapped.length);
+        console.log('📋 Explore: First course:', mapped[0]);
+      } else {
+        console.warn('⚠️ Explore: No courses received from API');
+      }
+    } catch (error) {
+      console.error('❌ Explore: Error fetching courses:', error);
+      console.error('❌ Explore: Error details:', error.response?.data || error.message);
+    }
+  };
+
   useEffect(() => {
-    fetch("http://localhost:5001/api/courses")
-      .then(r => r.json())
-      .then(d => {
-        if (d.success && d.data?.length > 0) {
-          const mapped = d.data
-            .filter(c => c.status === "published" || c.isPublished === true)
-            .map(c => ({
-              id:               c._id,
-              title:            c.title,
-              instructor:       typeof c.instructor === "object" ? c.instructor?.name || "Admin" : "Admin",
-              instructorAvatar: "AD",
-              instructorTitle:  (c.category || "Development") + " · Expert Instructor",
-              category:         c.category || "Development",
-              level:            c.level || "Beginner",
-              duration:         c.duration || "—",
-              lessons:          c.curriculum?.reduce((a,s) => a + (s.lessons?.length||0), 0) || 0,
-              rating:           c.rating || 0,
-              reviews:          0,
-              students:         c.enrolledStudents || 0,
-              price:            c.price || 0,
-              originalPrice:    c.originalPrice || c.price || 0,
-              tags:             Array.isArray(c.tags) ? c.tags : [],
-              description:      c.description || "",
-              thumbnail:        c.thumbnail || "",
-              gradient:         c.bg || "linear-gradient(135deg,#0a1830,#130840)",
-              accentGlow:       c.accentGlow || "rgba(124,47,255,.28)",
-              accent:           c.accent || "#7c2fff",
-              icon:             c.emoji || "📘",
-              badge:            c.badge || "New",
-              progress:         0,
-              nextLesson:       "",
-              certificate:      false,
-              outcomes:         Array.isArray(c.outcomes) ? c.outcomes : [],
-              updated:          new Date(c.updatedAt).toLocaleDateString("en-IN",{month:"short",year:"numeric"}),
-              lang:             c.language || "Hindi + English",
-            }));
-          setCourses([...mapped]);
-        }
-      })
-      .catch(() => {});
+    fetchCourses();
   }, []);
 
   console.log('✅ Explore Page State Initialized');
@@ -490,6 +508,7 @@ export default function ExplorePage() {
                     <button key={l} className={`f-pill${level===l?" on":""}`}
                       style={{ padding:"5px 12px", fontSize:".74rem" }}
                       onClick={() => setLevel(l)}>{l}</button>
+
                   ))}
                 </div>
                 <div style={{ flex:1 }}/>
@@ -634,6 +653,9 @@ export default function ExplorePage() {
 
       {modal && <CourseModal c={modal} onClose={() => setModal(null)} enrolled={enrolledIds.has(String(modal.id))} />}
       {pathModal && <PathModal p={pathModal} onClose={() => setPathModal(null)} />}
+      
+      {/* Debug Panel - Remove in production */}
+      <DebugPanel courses={COURSES} onRefresh={fetchCourses} />
     </div>
   );
 }

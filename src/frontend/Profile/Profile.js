@@ -16,6 +16,7 @@ import PomodoroTimer from './components/PomodoroTimer';
 import HeatMap from './components/HeatMap';
 import Avatar from './components/Avatar';
 import AvatarCropModal from './components/AvatarCropModal';
+import API_BASE from '../../config/api';
 
 /* ---------------------------------------
 MAIN COMPONENT
@@ -54,7 +55,7 @@ function handleAvatarSave(blob) {
   var previewUrl = URL.createObjectURL(blob);
   setAvatarUrl(previewUrl);
   setShowCropModal(false);
-  fetch('http://localhost:5001/api/users/avatar', {
+  fetch(`${API_BASE}/api/users/avatar`, {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
     body: fd,
@@ -79,7 +80,7 @@ useEffect(() => {
 useEffect(() => {
   const token = localStorage.getItem('token');
   if (!token) return;
-  fetch('http://localhost:5001/api/student/assignments/grades', {
+  fetch(`${API_BASE}/api/student/assignments/grades`, {
     headers: { Authorization: `Bearer ${token}` }
   })
     .then(r => r.json())
